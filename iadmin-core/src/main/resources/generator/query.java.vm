@@ -1,0 +1,63 @@
+package ${package.Controller}.query;
+
+import xyz.iotcode.iadmin.core.wrapper.QueryCondition;
+import xyz.iotcode.iadmin.core.base.dto.PageDTO;
+import java.util.Date;
+import java.io.Serializable;
+#if(${swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${entityLombokModel})
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+#end
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${entityLombokModel})
+@Data
+#if(${superEntityClass})
+@EqualsAndHashCode(callSuper = true)
+#else
+@EqualsAndHashCode(callSuper = false)
+#end
+@Accessors(chain = true)
+#end
+#if(${swagger2})
+@ApiModel(value="${entity}查询对象", description="$!{table.comment}查询对象")
+#end
+public class ${entity}Query extends PageDTO implements Serializable {
+
+#if(${entitySerialVersionUID})
+    private static final long serialVersionUID=1L;
+#end
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+
+#if(${field.keyFlag})
+#set($keyPropertyName=${field.propertyName})
+#end
+#if("$!field.comment" != "")
+#if(${swagger2})
+    @ApiModelProperty(value = "${field.comment}")
+#else
+    /**
+     * ${field.comment}
+     */
+#end
+#end
+## 普通字段
+    @QueryCondition
+    private ${field.propertyType} ${field.propertyName};
+## ----------  END 字段循环遍历  ----------
+
+#end
+}

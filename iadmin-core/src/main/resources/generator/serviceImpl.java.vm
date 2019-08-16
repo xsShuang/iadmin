@@ -1,0 +1,64 @@
+package ${package.ServiceImpl};
+
+import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Controller}.query.${entity}Query;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import xyz.iotcode.iadmin.core.wrapper.WrapperFactory;
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+
+    @Override
+    public IPage<${entity}> ipage(${entity}Query query) {
+        return this.page(query.createPage(), new WrapperFactory<${entity}>().create(query));
+    }
+
+    @Override
+    public boolean isave(${entity} param) {
+        return this.save(param);
+    }
+
+    @Override
+    public boolean iupdate(${entity} param) {
+        return this.updateById(param);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean iremove(List<Integer> list) {
+        for (Integer integer : list) {
+            this.iremove(integer);
+        }
+        return true;
+    }
+
+    @Override
+    public ${entity} igetById(Integer id) {
+        return this.getById(id);
+    }
+
+    @Override
+    public boolean iremove(Integer id) {
+        return this.removeById(id);
+    }
+}
+#end

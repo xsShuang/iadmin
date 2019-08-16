@@ -1,0 +1,59 @@
+package ${package.Service};
+
+#if(${cfg.enableRedis})
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+#end
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Controller}.query.${entity}Query;
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import java.util.List;
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+    
+#if(${cfg.enableRedis})
+    @Cacheable(cacheNames = "cache-${entity}-page", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
+#end
+    IPage<${entity}> ipage(${entity}Query query);
+
+#if(${cfg.enableRedis})
+    @CacheEvict(cacheNames = "cache-${entity}-page", allEntries = true)
+#end
+    boolean isave(${entity} param);
+
+#if(${cfg.enableRedis})
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache-${entity}-page", allEntries = true),
+            @CacheEvict(cacheNames = "cache-${entity}-byId", key = "#param.id" )
+    })
+#end
+    boolean iupdate(${entity} param);
+
+    boolean iremove(List<Integer> list);
+
+#if(${cfg.enableRedis})
+    @Cacheable(cacheNames = "cache-${entity}-byId", unless = "#result==null")
+#end
+    ${entity} igetById(Integer id);
+
+#if(${cfg.enableRedis})
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "cache-${entity}-page", allEntries = true),
+        @CacheEvict(cacheNames = "cache-${entity}-byId", key = "#id" )
+    })
+#end
+    boolean iremove(Integer id);
+}
+#end
