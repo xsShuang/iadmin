@@ -8,9 +8,9 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>xyz.iadmin</groupId>
+    <groupId>com.github.xs0529</groupId>
     <artifactId>iadmin-demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${project.release.version}</version>
     <name>iadmin-demo</name>
     <description>Demo project for Spring Boot</description>
 
@@ -20,9 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>xyz.iotcode.iadmin</groupId>
+            <groupId>com.github.xs0529</groupId>
             <artifactId>iadmin-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

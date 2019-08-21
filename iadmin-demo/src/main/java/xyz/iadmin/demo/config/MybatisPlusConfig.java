@@ -26,7 +26,6 @@ import java.util.Properties;
 @EnableTransactionManagement
 @MapperScan({"xyz.iadmin.demo.test.mapper"})
 public class MybatisPlusConfig {
-
     /**
      * 分页插件
      */
@@ -46,8 +45,4 @@ public class MybatisPlusConfig {
         return performanceInterceptor;
     }
 
-    @Bean
-    public ISqlInjector sqlInjector() {
-        return new LogicSqlInjector();
-    }
 }
