@@ -1,4 +1,4 @@
-package xyz.iadmin.demo;
+package xyz.iotcode.iadmin.demo;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -34,7 +34,7 @@ public class MybatisPlusGenerator {
         boolean isModule = true;
         // 包路径
         String packAge = MybatisPlusGenerator.class.getPackage().getName();
-        String package1 = packAge+".visit_client";
+        String package1 = packAge+".system";
         // 作者
         String author = "谢霜";
         // 数据库url
@@ -51,7 +51,7 @@ public class MybatisPlusGenerator {
         String tableName = "^sys.*";
         String[] ExcludeTable = new String[]{};
         // 需要生成的表的前缀，生成后将不含前缀
-        String[] tableQ = new String[]{"sys_"};
+        String[] tableQ = new String[]{""};
         // 是否启用redis
         boolean enableRedis = true;
         // 是否在entity生成jsr303校验注解

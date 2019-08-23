@@ -97,6 +97,10 @@ public class ErrorInfoBuilder implements HandlerExceptionResolver, Ordered {
             errorInfo.setMessage(stringBuffer.toString());
         }
 
+        if (error instanceof MyRuntimeException){
+            MyRuntimeException myRuntimeException = (MyRuntimeException) error;
+            errorInfo.setStatusCode(myRuntimeException.getCode());
+        }
         return errorInfo;
     }
 

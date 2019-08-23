@@ -46,6 +46,7 @@
     <modules>
         <module>iadmin-common</module>
         <module>iadmin-core</module>
+        <module>iadmin-permissions</module>
     </modules>
 
     <dependencyManagement>

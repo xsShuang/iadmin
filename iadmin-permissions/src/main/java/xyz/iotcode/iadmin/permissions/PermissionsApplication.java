@@ -1,15 +1,13 @@
-package xyz.iadmin.demo;
+package xyz.iotcode.iadmin.permissions;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
-@EnableCaching
 @SpringBootApplication
-public class DemoApplication {
+public class PermissionsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(PermissionsApplication.class, args);
     }
 
 }
