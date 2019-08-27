@@ -34,11 +34,11 @@ public class MybatisPlusGenerator {
         boolean isModule = true;
         // 包路径
         String packAge = MybatisPlusGenerator.class.getPackage().getName();
-        String package1 = packAge+".system";
+        String package1 = packAge+".module.log";
         // 作者
         String author = "谢霜";
         // 数据库url
-        String dataUrl = "127.0.0.1:3307";
+        String dataUrl = "47.107.79.3:3306";
         // 数据库用户名
         String username = "root";
         // 数据库密码
@@ -48,7 +48,7 @@ public class MybatisPlusGenerator {
         // 逻辑删除字段，不要为null或者空
         String logicDeleteFieldName = "deleted";
         // 需要生成的表，正则表达式匹配前缀
-        String tableName = "^sys.*";
+        String tableName = "^sys_log*";
         String[] ExcludeTable = new String[]{};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[]{""};

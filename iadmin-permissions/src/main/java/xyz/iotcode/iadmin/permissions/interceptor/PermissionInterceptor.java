@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermissionInterceptor implements HandlerInterceptor {
 
-    private static String TOKEN = "token";
+    public static String TOKEN = "token";
 
     public PermissionInterceptor(PermissionProvider permissionProvider, UserProvider userProvider){
         super();

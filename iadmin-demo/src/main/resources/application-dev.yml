@@ -1,4 +1,4 @@
-server:
+5server:
   port: 10010
 logging:
   level:
@@ -13,7 +13,7 @@ spring:
       maximumPoolSize: 15
       minimum-idle: 5
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://127.0.0.1:3307/iadmin?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://47.107.79.3:3306/iadmin?characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: root
 
@@ -24,7 +24,7 @@ spring:
     password: 123456         # Redis服务器连接密码（默认为空）
     port: 6379               # Redis服务器连接端口
     timeout: 5000            # 连接超时时间（毫秒）
-    jedis:
+    Lettuce:
       pool:
         max-active: 8   # 连接池最大连接数（使用负值表示没有限制）
         max-idle: 8      # 连接池中的最大空闲连接

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.iotcode.iadmin.demo.module.log.mapper.SysLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="xyz.iotcode.iadmin.demo.module.log.entity.SysLog">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="description" property="description" />
+        <result column="exception_detail" property="exceptionDetail" />
+        <result column="log_type" property="logType" />
+        <result column="method" property="method" />
+        <result column="params" property="params" />
+        <result column="request_ip" property="requestIp" />
+        <result column="time" property="time" />
+        <result column="username" property="username" />
+        <result column="begin_time" property="beginTime" />
+        <result column="end_time" property="endTime" />
+        <result column="log_level" property="logLevel" />
+    </resultMap>
+
+</mapper>

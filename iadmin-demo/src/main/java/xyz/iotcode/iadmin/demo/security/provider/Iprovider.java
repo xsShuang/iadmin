@@ -4,10 +4,10 @@ import cn.hutool.core.collection.CollectionUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.iotcode.iadmin.demo.system.entity.SysPermission;
-import xyz.iotcode.iadmin.demo.system.entity.SysRole;
-import xyz.iotcode.iadmin.demo.system.service.SysPermissionService;
-import xyz.iotcode.iadmin.demo.system.service.SysRoleService;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysRole;
+import xyz.iotcode.iadmin.demo.module.system.service.SysPermissionService;
+import xyz.iotcode.iadmin.demo.module.system.service.SysRoleService;
 import xyz.iotcode.iadmin.permissions.bean.PermissionUser;
 import xyz.iotcode.iadmin.permissions.bean.UrlPermission;
 import xyz.iotcode.iadmin.permissions.provider.PermissionProvider;
@@ -28,6 +28,8 @@ public class Iprovider implements UserProvider, PermissionProvider {
     private SysRoleService sysRoleService;
     @Autowired
     private SysPermissionService sysPermissionService;
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
     @Override
     public UrlPermission getByUrlAndRequestWay(String url, String requestWay){
@@ -73,6 +75,6 @@ public class Iprovider implements UserProvider, PermissionProvider {
 
     @Override
     public PermissionUser getUserByToken(String token) {
-        return null;
+        return authenticationProvider.getUserByToken(token);
     }
 }
