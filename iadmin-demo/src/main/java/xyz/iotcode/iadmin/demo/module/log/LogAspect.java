@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.iotcode.iadmin.common.util.IPUtil;
 import xyz.iotcode.iadmin.common.util.ThrowableUtil;
+import xyz.iotcode.iadmin.core.common.log.SaveLog;
 import xyz.iotcode.iadmin.demo.module.log.entity.SysLog;
 import xyz.iotcode.iadmin.demo.module.log.service.SysLogService;
 import xyz.iotcode.iadmin.demo.security.util.UserUtils;
@@ -30,7 +31,7 @@ public class LogAspect {
     private Date date;
 
 
-    @Pointcut("@annotation(SaveLog)")
+    @Pointcut("@annotation(xyz.iotcode.iadmin.core.common.log.SaveLog)")
     public void logPointcut() {
     }
 

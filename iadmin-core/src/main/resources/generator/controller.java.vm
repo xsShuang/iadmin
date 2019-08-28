@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${entity};
+#if(${cfg.enableIsecurity})
+import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
+#end
+#if(${cfg.enableSaveLog})
+import xyz.iotcode.iadmin.core.common.log.SaveLog;
+#end
 #if(${swagger2})
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,6 +56,12 @@ public class ${table.controllerName} {
      * @author : ${author}
      * @since : Create in ${date}
      */
+#if(${cfg.enableSaveLog})
+    @SaveLog(value="${table.comment}分页数据接口")
+#end
+#if(${cfg.enableIsecurity})
+    @IPermissions(value="${entity}:page")
+#end
 #if(${swagger2})
     @ApiOperation(value="${table.comment}分页数据接口", nickname="${entity}:page")
 #end
@@ -64,6 +76,12 @@ public class ${table.controllerName} {
      * @author : ${author}
      * @since : Create in ${date}
      */
+#if(${cfg.enableSaveLog})
+    @SaveLog(value="获取${table.comment}数据接口")
+#end
+#if(${cfg.enableIsecurity})
+    @IPermissions(value="${entity}:get")
+#end
 #if(${swagger2})
     @ApiOperation(value="获取${table.comment}数据接口", nickname="${entity}:get")
 #end
@@ -73,18 +91,23 @@ public class ${table.controllerName} {
     }
 
     /**
-     * @description : 通过id删除${table.comment}
+     * @description : 新增${table.comment}
      * ---------------------------------
      * @author : ${author}
      * @since : Create in ${date}
      */
-#if(${swagger2})
-    @ApiOperation(value="删除${table.comment}数据接口", nickname="${entity}:del")
+#if(${cfg.enableSaveLog})
+    @SaveLog(value="新增${table.comment}数据接口")
 #end
-    @PostMapping("/remove/{id}")
-    public IResult delete${entity}ById(@PathVariable(value = "id") String id) {
-        List<Integer> list = Arrays.asList(id.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
-        return IResult.auto(${table.entityPath}Service.iremove(list));
+#if(${cfg.enableIsecurity})
+    @IPermissions(value="${entity}:add")
+#end
+#if(${swagger2})
+    @ApiOperation(value="新增${table.comment}数据接口", nickname="${entity}:add")
+#end
+    @PostMapping("/add")
+    public IResult add${entity}(@Validated({Insert.class}) ${entity} param) {
+        return IResult.auto(${table.entityPath}Service.isave(param));
     }
 
     /**
@@ -93,6 +116,12 @@ public class ${table.controllerName} {
      * @author : ${author}
      * @since : Create in ${date}
      */
+#if(${cfg.enableSaveLog})
+    @SaveLog(value="更新${table.comment}数据接口")
+#end
+#if(${cfg.enableIsecurity})
+    @IPermissions(value="${entity}:update")
+#end
 #if(${swagger2})
     @ApiOperation(value="更新${table.comment}数据接口", nickname="${entity}:update")
 #end
@@ -102,16 +131,24 @@ public class ${table.controllerName} {
     }
 
     /**
-     * @description : 新增${table.comment}
+     * @description : 通过id删除${table.comment}
      * ---------------------------------
      * @author : ${author}
      * @since : Create in ${date}
      */
-#if(${swagger2})
-    @ApiOperation(value="新增${table.comment}数据接口", nickname="${entity}:add")
+#if(${cfg.enableSaveLog})
+    @SaveLog(value="删除${table.comment}数据接口", level = 3)
 #end
-    @PostMapping("/add")
-    public IResult add${entity}(@Validated({Insert.class}) ${entity} param) {
-        return IResult.auto(${table.entityPath}Service.isave(param));
+#if(${cfg.enableIsecurity})
+    @IPermissions(value="${entity}:del")
+#end
+#if(${swagger2})
+    @ApiOperation(value="删除${table.comment}数据接口", nickname="${entity}:del")
+#end
+    @PostMapping("/remove/{id}")
+    public IResult delete${entity}ById(@PathVariable(value = "id") String id) {
+        List<Integer> list = Arrays.asList(id.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
+        return IResult.auto(${table.entityPath}Service.iremove(list));
     }
+
 }

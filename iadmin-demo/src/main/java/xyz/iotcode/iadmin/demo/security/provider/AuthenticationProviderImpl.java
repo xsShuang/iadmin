@@ -1,5 +1,6 @@
 package xyz.iotcode.iadmin.demo.security.provider;
 
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,15 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     private static final long TWO_HOURS = 7200;
 
+    /**
+     * 乱输的，前盐，新增以及修改密码时不要忘了
+     */
+    public static final String BEGIN_SALT = "jkhjfghsjadhfjos";
+    /**
+     * 乱输的，后盐，新增以及修改密码时不要忘了
+     */
+    public static final String END_SALT = "mxojafwfjaisdof";
+
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
@@ -35,7 +45,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         long l;
         SysUser sysUser = new SysUser().selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, dto.getUsername())
-                .eq(SysUser::getPassword, dto.getPassword()));
+                .eq(SysUser::getPassword, SecureUtil.md5(BEGIN_SALT+dto.getPassword().trim()+END_SALT)));
         if (sysUser==null){
             throw new MyRuntimeException("用户名或者密码错误");
         }

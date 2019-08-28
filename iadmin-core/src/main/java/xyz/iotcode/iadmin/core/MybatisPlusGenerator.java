@@ -53,6 +53,11 @@ public class MybatisPlusGenerator {
         String[] ExcludeTable = new String[]{};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[]{"sys_"};
+
+        // 是否启用权限注解
+        boolean enableIsecurity = true;
+        // 是否启用保存日志注解
+        boolean enableSaveLog = true;
         // 是否启用redis
         boolean enableRedis = true;
         // 是否在entity生成jsr303校验注解
@@ -140,6 +145,8 @@ public class MybatisPlusGenerator {
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
                 map.put("enableRedis", enableRedis);
+                map.put("enableIsecurity", enableIsecurity);
+                map.put("enableSaveLog", enableSaveLog);
                 this.setMap(map);
             }
         };

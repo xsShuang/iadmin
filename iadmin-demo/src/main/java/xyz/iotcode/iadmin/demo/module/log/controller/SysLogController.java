@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.iotcode.iadmin.common.vo.IResult;
-import xyz.iotcode.iadmin.demo.module.log.SaveLog;
+import xyz.iotcode.iadmin.core.common.log.SaveLog;
 import xyz.iotcode.iadmin.demo.module.log.controller.query.SysLogQuery;
 import xyz.iotcode.iadmin.demo.module.log.entity.SysLog;
 import xyz.iotcode.iadmin.demo.module.log.service.SysLogService;
@@ -50,7 +50,7 @@ public class SysLogController {
      * @author : 谢霜
      * @since : Create in 2019-08-27
      */
-    @SaveLog(value = "日志删除数据接口")
+    @SaveLog(value = "日志删除数据接口", level = 3)
     @ApiOperation(value="日志删除数据接口", nickname="SysLog:del")
     @PostMapping("/remove/{id}")
     public IResult deleteSysLogById(@PathVariable(value = "id") String id) {
