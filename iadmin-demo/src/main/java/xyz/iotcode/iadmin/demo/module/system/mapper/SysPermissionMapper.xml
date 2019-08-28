@@ -7,12 +7,14 @@
         <id column="id" property="id" />
         <result column="permission_code" property="permissionCode" />
         <result column="permission_name" property="permissionName" />
-        <result column="parent_id" property="parentId" />
+        <result column="pid" property="pid" />
         <result column="sort" property="sort" />
         <result column="create_time" property="createTime" />
         <result column="url" property="url" />
         <result column="state" property="state" />
         <result column="request_way" property="requestWay" />
+        <result column="type" property="type" />
+        <result column="component_url" property="componentUrl" />
     </resultMap>
 
 </mapper>

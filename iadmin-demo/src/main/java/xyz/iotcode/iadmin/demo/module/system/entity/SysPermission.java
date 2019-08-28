@@ -47,9 +47,9 @@ public class SysPermission extends Model<SysPermission> {
     @TableField("permission_name")
     private String permissionName;
 
-    @ApiModelProperty(value = "模块")
-    @TableField("parent_id")
-    private Integer parentId;
+    @ApiModelProperty(value = "父级id")
+    @TableField("pid")
+    private Integer pid;
 
     @NotNull(message = "排序号不能为空")
     @ApiModelProperty(value = "排序号")
@@ -73,6 +73,15 @@ public class SysPermission extends Model<SysPermission> {
     @ApiModelProperty(value = "请求方式")
     @TableField("request_way")
     private String requestWay;
+
+    @NotNull(message = "权限类型不能为空")
+    @ApiModelProperty(value = "1路由，2操作")
+    @TableField("type")
+    private Integer type;
+
+    @ApiModelProperty(value = "组件地址")
+    @TableField("component_url")
+    private String componentUrl;
 
 
     @Override
