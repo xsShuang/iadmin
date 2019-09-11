@@ -1,4 +1,6 @@
-package xyz.iotcode.iadmin.common.validated.annotation;
+package xyz.iotcode.iadmin.common.annotation.validated;
+
+import xyz.iotcode.iadmin.common.validated.validator.ChineseValidator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -17,8 +19,7 @@ import javax.validation.Payload;
 import javax.validation.constraints.NotNull;
 
 /**
- * 验证是否为身份证号码（18位中国）<br>
- * 出生日期只支持到到2999年
+ * 验证是否为汉字
  * 
  * @author	孙金川
  * @since	2019年5月8日
@@ -26,8 +27,8 @@ import javax.validation.constraints.NotNull;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-@Constraint(validatedBy = { IdCardValidator.class })
-public @interface IdCard {
+@Constraint(validatedBy = { ChineseValidator.class })
+public @interface Chinese {
 	
 	/**
 	 * 是否不允许为空 {@linkplain NotNull}
@@ -35,7 +36,7 @@ public @interface IdCard {
 	 */
 	boolean notNull() default true;
 	
-	String message() default "不是一个合法的身份证号码";
+	String message() default "必须是中文汉字";
 	
 	Class<?>[] groups() default {};
 	

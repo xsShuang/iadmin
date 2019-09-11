@@ -11,6 +11,4 @@ public class CoreApplication {
         SpringApplication.run(CoreApplication.class, args);
     }
 
-    @QueryCondition
-    private String name;
 }

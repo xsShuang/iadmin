@@ -11,8 +11,11 @@ public interface PermissionProvider {
 
     /**
      * 根据url获取链接的权限信息
+     * @version: 1.0
+     * @author: xieshuang
      * @param url
-     * @return
+     * @param requestWay
+     * @return xyz.iotcode.iadmin.permissions.bean.UrlPermission
      */
     UrlPermission getByUrlAndRequestWay(String url, String requestWay);
 

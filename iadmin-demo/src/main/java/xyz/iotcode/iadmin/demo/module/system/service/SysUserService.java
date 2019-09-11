@@ -21,14 +21,11 @@ public interface SysUserService extends IService<SysUser> {
     @Cacheable(cacheNames = "cache-SysUser-page", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
     IPage<SysUser> ipage(SysUserQuery query);
 
-    @CacheEvict(cacheNames = "cache-SysUser-page", allEntries = true)
-    boolean isave(SysUser param);
-
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache-SysUser-page", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysUser-byId", key = "#param.id" )
     })
-    boolean iupdate(SysUser param);
+    boolean isaveOrUpdate(SysUser param);
 
     boolean iremove(List<Integer> list);
 

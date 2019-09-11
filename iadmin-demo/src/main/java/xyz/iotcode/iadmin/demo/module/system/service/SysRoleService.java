@@ -21,16 +21,13 @@ public interface SysRoleService extends IService<SysRole> {
     @Cacheable(cacheNames = "cache-SysRole-page", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
     IPage<SysRole> ipage(SysRoleQuery query);
 
-    @CacheEvict(cacheNames = "cache-SysRole-page", allEntries = true)
-    boolean isave(SysRole param);
-
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache-SysRole-page", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysRole-getByPermission", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysRole-getByUserId", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysRole-byId", key = "#param.id" )
     })
-    boolean iupdate(SysRole param);
+    boolean isaveOrUpdate(SysRole param);
 
     boolean iremove(List<Integer> list);
 

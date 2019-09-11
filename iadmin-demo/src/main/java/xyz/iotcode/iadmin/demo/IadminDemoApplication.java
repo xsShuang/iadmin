@@ -2,10 +2,14 @@ package xyz.iotcode.iadmin.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import xyz.iotcode.iadmin.common.annotation.EnableILettuceRedis;
+import xyz.iotcode.iadmin.common.annotation.EnableIRedisKey;
 
 /**
  * @author Administrator
  */
+@EnableILettuceRedis
+@EnableIRedisKey
 @SpringBootApplication
 public class IadminDemoApplication {
 

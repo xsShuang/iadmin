@@ -1,4 +1,6 @@
-package xyz.iotcode.iadmin.common.validated.annotation;
+package xyz.iotcode.iadmin.common.annotation.validated;
+
+import xyz.iotcode.iadmin.common.validated.validator.CellphoneValidator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -17,7 +19,7 @@ import javax.validation.Payload;
 import javax.validation.constraints.NotNull;
 
 /**
- * 验证是否为MAC地址
+ * 验证是否为手机号码（中国）
  * 
  * @author	孙金川
  * @since	2019年5月8日
@@ -25,8 +27,8 @@ import javax.validation.constraints.NotNull;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-@Constraint(validatedBy = { MacAddressValidator.class })
-public @interface MacAddress {
+@Constraint(validatedBy = { CellphoneValidator.class })
+public @interface Cellphone {
 	
 	/**
 	 * 是否不允许为空 {@linkplain NotNull}
@@ -34,7 +36,7 @@ public @interface MacAddress {
 	 */
 	boolean notNull() default true;
 	
-	String message() default "不是一个合法的MAC地址";
+	String message() default "不是一个合法的手机号码";
 	
 	Class<?>[] groups() default {};
 	

@@ -21,7 +21,7 @@
             JOIN sys_role r ON rp.role_id = r.role_id
     </select>
     <select id="getByUserId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysRole">
-        SSELECT
+        SELECT
             r.*
         FROM
             sys_user_role ur

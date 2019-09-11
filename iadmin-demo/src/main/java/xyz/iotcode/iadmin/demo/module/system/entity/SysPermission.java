@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import xyz.iotcode.iadmin.common.validated.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,7 +34,7 @@ public class SysPermission extends Model<SysPermission> {
 
     private static final long serialVersionUID=1L;
 
-    @NotNull(message = "不能为空")
+    @NotNull(groups = Update.class, message = "不能为空")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -56,7 +57,6 @@ public class SysPermission extends Model<SysPermission> {
     @TableField("sort")
     private Integer sort;
 
-    @NotNull(message = "创建时间不能为空")
     @ApiModelProperty(value = "创建时间")
     @TableField("create_time")
     private Date createTime;

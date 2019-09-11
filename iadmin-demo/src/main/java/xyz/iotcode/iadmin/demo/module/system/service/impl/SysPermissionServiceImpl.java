@@ -1,6 +1,7 @@
 package xyz.iotcode.iadmin.demo.module.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
@@ -23,6 +24,9 @@ import java.util.List;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
+
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
     @Override
     public IPage<SysPermission> ipage(SysPermissionQuery query) {
@@ -77,5 +81,15 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public SysPermission getByCode(String code) {
         return this.getOne(new LambdaQueryWrapper<SysPermission>()
                 .eq(SysPermission::getPermissionCode, code));
+    }
+
+    @Override
+    public List<SysPermission> getByUserId(Integer userId) {
+        return sysPermissionMapper.getByUserId(userId);
+    }
+
+    @Override
+    public List<SysPermission> getByRoleId(Integer roleId) {
+        return sysPermissionMapper.getByRoleId(roleId);
     }
 }

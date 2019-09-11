@@ -1,4 +1,6 @@
-package xyz.iotcode.iadmin.common.validated.annotation;
+package xyz.iotcode.iadmin.common.annotation.validated;
+
+import xyz.iotcode.iadmin.common.validated.validator.BirthdayValidator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;

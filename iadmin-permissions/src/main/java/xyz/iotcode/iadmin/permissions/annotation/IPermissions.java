@@ -12,5 +12,9 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface IPermissions {
+    /**
+     * 权限标识
+     * @return
+     */
     String value();
 }

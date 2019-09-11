@@ -75,7 +75,8 @@ public class SysUserController {
     @ApiOperation(value="新增用户数据接口", nickname="SysUser:add")
     @PostMapping("/add")
     public IResult addSysUser(@Validated({Insert.class}) SysUser param) {
-        return IResult.auto(sysUserService.isave(param));
+        param.setUserId(null);
+        return IResult.auto(sysUserService.isaveOrUpdate(param));
     }
 
     /**
@@ -89,7 +90,7 @@ public class SysUserController {
     @ApiOperation(value="更新用户数据接口", nickname="SysUser:update")
     @PostMapping("/update")
     public IResult updateSysUserById(@Validated({Update.class}) SysUser param) {
-        return IResult.auto(sysUserService.iupdate(param));
+        return IResult.auto(sysUserService.isaveOrUpdate(param));
     }
 
     /**

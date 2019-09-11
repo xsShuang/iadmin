@@ -1,12 +1,19 @@
 package xyz.iotcode.iadmin.demo.module.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysUserRoleQuery;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysRolePermission;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import xyz.iotcode.iadmin.demo.module.system.mapper.SysRolePermissionMapper;
+import xyz.iotcode.iadmin.demo.module.system.mapper.SysUserRoleMapper;
+
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 /**
  * <p>
@@ -17,27 +24,24 @@ import java.util.List;
  * @since 2019-08-23
  */
 public interface SysUserRoleService extends IService<SysUserRole> {
-    
-    @Cacheable(cacheNames = "cache-SysUserRole-page", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
-    IPage<SysUserRole> ipage(SysUserRoleQuery query);
 
-    @CacheEvict(cacheNames = "cache-SysUserRole-page", allEntries = true)
-    boolean isave(SysUserRole param);
-
+    /**
+     * 根据用户id删除角色信息
+     * @version: 1.0
+     * @date: 2019/9/11 17:04
+     * @author: xieshuang
+     * @param userId
+     * @return boolean
+     */
     @Caching(evict = {
-            @CacheEvict(cacheNames = "cache-SysUserRole-page", allEntries = true),
-            @CacheEvict(cacheNames = "cache-SysUserRole-byId", key = "#param.id" )
+            @CacheEvict(cacheNames = "cache-SysPermission-ByUserId",  key = "#userId")
     })
-    boolean iupdate(SysUserRole param);
+    boolean removeByUserId(Integer userId);
 
-    boolean iremove(List<Integer> list);
-
-    @Cacheable(cacheNames = "cache-SysUserRole-byId", unless = "#result==null")
-    SysUserRole igetById(Integer id);
-
-    @Caching(evict = {
-        @CacheEvict(cacheNames = "cache-SysUserRole-page", allEntries = true),
-        @CacheEvict(cacheNames = "cache-SysUserRole-byId", key = "#id" )
-    })
-    boolean iremove(Integer id);
+    /**
+     * 批量保存用户与角色的对应关系
+     * @param sysUserRoles
+     * @return
+     */
+    boolean saveBatch(@NotEmpty List<SysUserRole> sysUserRoles);
 }

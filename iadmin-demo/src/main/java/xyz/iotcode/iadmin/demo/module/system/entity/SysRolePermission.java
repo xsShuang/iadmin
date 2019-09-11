@@ -32,7 +32,6 @@ public class SysRolePermission extends Model<SysRolePermission> {
 
     private static final long serialVersionUID=1L;
 
-    @NotNull(message = "不能为空")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 

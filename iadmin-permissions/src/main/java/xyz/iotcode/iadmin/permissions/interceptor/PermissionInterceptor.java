@@ -3,14 +3,14 @@ package xyz.iotcode.iadmin.permissions.interceptor;
 import cn.hutool.core.collection.CollectionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
 import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 import xyz.iotcode.iadmin.permissions.bean.PermissionUser;
-import xyz.iotcode.iadmin.permissions.bean.UrlPermission;
-import xyz.iotcode.iadmin.permissions.provider.PermissionProvider;
+import xyz.iotcode.iadmin.permissions.properties.ISecurityProperties;
 import xyz.iotcode.iadmin.permissions.provider.UserProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,14 +24,15 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
     public static String TOKEN = "token";
 
-    public PermissionInterceptor(PermissionProvider permissionProvider, UserProvider userProvider){
+    public PermissionInterceptor(UserProvider userProvider, ISecurityProperties properties){
         super();
-        this.permissionProvider = permissionProvider;
+        this.properties = properties;
         this.userProvider = userProvider;
     }
 
+    private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
     private UserProvider userProvider;
-    private PermissionProvider permissionProvider;
+    private ISecurityProperties properties;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -48,54 +49,42 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
 
     /**
-     * 是否有权限
-     * 验证逻辑：
-     * 1.获取注解，判断是否有注解或者注解上是否有值
-     * 2.如果没有注解或者没有值根据url获取链接需要的权限信息，否则根据注解的权限编码获取
-     * 3.判断链接是否需要校验（没有权限信息，或者为0即不需要校验）
-     * 4.如果需要校验则通过request获取token信息，通过用户提供者（UserProvider）获取用户信息
+     * 验证是否有权限
+     * @version: 1.0
+     * @date: 2019/9/11 16:06
+     * @author: xieshuang
+     * @param request
      * @param handler
-     * @return
+     * @return boolean
      */
     private boolean hasPermission(HttpServletRequest request, Object handler) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             // 获取方法上的注解
             IPermissions iPermissions = handlerMethod.getMethod().getAnnotation(IPermissions.class);
-            // 如果标记了注解，则判断权限
-            UrlPermission urlPermission;
-            if (iPermissions != null && StringUtils.isNotBlank(iPermissions.value())) {
-                urlPermission = permissionProvider.getByPermissionCode(iPermissions.value());
-            }else {
-                urlPermission = permissionProvider.getByUrlAndRequestWay(request.getRequestURI(), request.getMethod());
-            }
-            if (urlPermission==null){
-                return true;
-            }else {
-                int state = urlPermission.getState();
-                // 状态（0不需要验证，1需要登录，2需要验证）
-                if (state==0){
-                    return true;
-                }else if (state==1){
-                    PermissionUser permissionUser = getPermissionUser(request);
-                    if (permissionUser==null){
-                        throw new MyRuntimeException("未登录", 401);
-                    }
-                    if (permissionUser.getState()==0){
-                        throw new MyRuntimeException("账号已被禁用", 403);
-                    }
-                }else {
-                    PermissionUser permissionUser = getPermissionUser(request);
-                    if (permissionUser==null){
-                        throw new MyRuntimeException("未登录", 401);
-                    }
-                    if (CollectionUtil.isEmpty(permissionUser.getRoles())){
-                        throw new MyRuntimeException("无权限", 403);
-                    }
-                    if (!urlPermission.getRoles().removeAll(permissionUser.getRoles())){
-                        throw new MyRuntimeException("无权限", 403);
+            String[] noCheckUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(properties.getNoCheckUrl(), ",");
+            if (noCheckUrls!=null&&noCheckUrls.length>0){
+                for (int i = 0; i < noCheckUrls.length; i++) {
+                    if (ANT_PATH_MATCHER.match(noCheckUrls[i], request.getRequestURI())){
+                        return true;
                     }
                 }
+            }
+            if (iPermissions == null) {
+                return true;
+            }
+            PermissionUser permissionUser = getPermissionUser(request);
+            if (permissionUser==null){
+                throw new MyRuntimeException("未登录", 401);
+            }
+            if (StringUtils.isBlank(iPermissions.value())){
+                return true;
+            }
+            if (CollectionUtil.isEmpty(permissionUser.getPermissions())){
+                throw new MyRuntimeException("无权限", 403);
+            }
+            if (permissionUser.getPermissions().contains(iPermissions.value())){
+                return true;
             }
         }
         return true;

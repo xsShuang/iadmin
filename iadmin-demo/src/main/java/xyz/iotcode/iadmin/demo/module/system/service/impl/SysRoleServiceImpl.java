@@ -42,12 +42,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean isave(SysRole param) {
-        SysRole one = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getLabel, param.getLabel()));
-        if (one!=null){
-            throw new MyRuntimeException("角色标识已存在");
+    public boolean isaveOrUpdate(SysRole param) {
+        if (param.getRoleId()==null){
+            SysRole one = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getLabel, param.getLabel()));
+            if (one!=null){
+                throw new MyRuntimeException("角色标识已存在");
+            }
+        }else {
+            param.setLabel(null);
         }
-        this.save(param);
+        this.saveOrUpdate(param);
         if (CollectionUtil.isNotEmpty(param.getPermissionIdList())){
             sysRolePermissionService.removeByRoleId(param.getRoleId());
             List<SysRolePermission> sysRolePermissionList = new ArrayList<>();
@@ -57,11 +61,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             sysRolePermissionService.saveBatch(sysRolePermissionList);
         }
         return true;
-    }
-
-    @Override
-    public boolean iupdate(SysRole param) {
-        return this.updateById(param);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -90,6 +89,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<SysRole> getByUserId(Integer id) {
-        return null;
+        return sysRoleMapper.getByUserId(id);
     }
 }

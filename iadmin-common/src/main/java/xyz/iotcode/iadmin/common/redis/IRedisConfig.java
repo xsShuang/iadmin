@@ -1,11 +1,12 @@
-package xyz.iotcode.iadmin.demo.config.redis;
+package xyz.iotcode.iadmin.common.redis;
 
-import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -17,11 +18,10 @@ import java.time.Duration;
  * @author xieshuang
  * @date 2019-04-10 16:53
  */
-@Configuration
-@EnableCaching
-public class RedisConfig {
+public class IRedisConfig {
 
     @Bean
+    @ConditionalOnClass(RedisOperations.class)
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
@@ -35,6 +35,7 @@ public class RedisConfig {
     }
 
     @Bean
+    @ConditionalOnClass(RedisOperations.class)
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
@@ -47,6 +48,12 @@ public class RedisConfig {
         template.afterPropertiesSet();
         template.setEnableTransactionSupport(true);
         return template;
+    }
+
+    @Bean
+    @ConditionalOnBean(name = "redisTemplate")
+    public RedisService redisService() {
+        return new RedisService();
     }
 
 }

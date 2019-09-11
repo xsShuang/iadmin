@@ -1,4 +1,6 @@
-package xyz.iotcode.iadmin.common.validated.annotation;
+package xyz.iotcode.iadmin.common.annotation.validated;
+
+import xyz.iotcode.iadmin.common.validated.validator.UUIDValidator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -17,7 +19,8 @@ import javax.validation.Payload;
 import javax.validation.constraints.NotNull;
 
 /**
- * 验证是否为IPV4地址
+ * 验证是否为UUID<br>
+ * 包括带横线标准格式和不带横线的简单模式
  * 
  * @author	孙金川
  * @since	2019年5月8日
@@ -25,8 +28,8 @@ import javax.validation.constraints.NotNull;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-@Constraint(validatedBy = { IPV4Validator.class })
-public @interface IPV4 {
+@Constraint(validatedBy = { UUIDValidator.class })
+public @interface UUID {
 	
 	/**
 	 * 是否不允许为空 {@linkplain NotNull}
@@ -34,7 +37,7 @@ public @interface IPV4 {
 	 */
 	boolean notNull() default true;
 	
-	String message() default "不是一个合法的IPV4地址";
+	String message() default "不是一个合法的UUID";
 	
 	Class<?>[] groups() default {};
 	

@@ -1,14 +1,26 @@
 package xyz.iotcode.iadmin.demo.module.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysUserQuery;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysRolePermission;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysUser;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysUserRole;
 import xyz.iotcode.iadmin.demo.module.system.mapper.SysUserMapper;
+import xyz.iotcode.iadmin.demo.module.system.service.SysUserRoleService;
 import xyz.iotcode.iadmin.demo.module.system.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import xyz.iotcode.iadmin.core.wrapper.WrapperFactory;
+import xyz.iotcode.iadmin.demo.security.provider.AuthenticationProviderImpl;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,19 +34,40 @@ import java.util.List;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+
     @Override
     public IPage<SysUser> ipage(SysUserQuery query) {
         return this.page(query.createPage(), new WrapperFactory<SysUser>().create(query));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean isave(SysUser param) {
-        return this.save(param);
-    }
-
-    @Override
-    public boolean iupdate(SysUser param) {
-        return this.updateById(param);
+    public boolean isaveOrUpdate(SysUser param) {
+        if (param.getUserId()==null){
+            SysUser one = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, param.getUsername()));
+            if (one!=null){
+                throw new MyRuntimeException("用户名已存在");
+            }
+            if (StrUtil.isBlank(param.getPassword())){
+                param.setPassword("123456");
+            }
+            param.setPassword(SecureUtil.md5(AuthenticationProviderImpl.BEGIN_SALT+param.getPassword().trim()+AuthenticationProviderImpl.END_SALT));
+        }else {
+            param.setUsername(null);
+            param.setPassword(null);
+        }
+        this.saveOrUpdate(param);
+        if (CollectionUtil.isNotEmpty(param.getRoleIds())){
+            sysUserRoleService.removeByUserId(param.getUserId());
+            List<SysUserRole> sysUserRoles = new ArrayList<>();
+            for (Integer integer : param.getRoleIds()) {
+                sysUserRoles.add(new SysUserRole().setUserId(param.getUserId()).setRoleId(integer));
+            }
+            sysUserRoleService.saveBatch(sysUserRoles);
+        }
+        return true;
     }
 
     @Transactional(rollbackFor = Exception.class)

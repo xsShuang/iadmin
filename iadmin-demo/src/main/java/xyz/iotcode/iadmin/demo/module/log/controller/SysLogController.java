@@ -11,6 +11,7 @@ import xyz.iotcode.iadmin.core.common.log.SaveLog;
 import xyz.iotcode.iadmin.demo.module.log.controller.query.SysLogQuery;
 import xyz.iotcode.iadmin.demo.module.log.entity.SysLog;
 import xyz.iotcode.iadmin.demo.module.log.service.SysLogService;
+import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +39,7 @@ public class SysLogController {
      * @since : Create in 2019-08-27
      */
     @SaveLog(value = "日志分页数据接口")
+    @IPermissions("SysLog:page")
     @ApiOperation(value="日志分页数据接口", nickname="SysLog:page")
     @PostMapping("/list")
     public IResult<IPage<SysLog>> getSysLogPage(SysLogQuery query) {
@@ -51,6 +53,7 @@ public class SysLogController {
      * @since : Create in 2019-08-27
      */
     @SaveLog(value = "日志删除数据接口", level = 3)
+    @IPermissions("SysLog:del")
     @ApiOperation(value="日志删除数据接口", nickname="SysLog:del")
     @PostMapping("/remove/{id}")
     public IResult deleteSysLogById(@PathVariable(value = "id") String id) {

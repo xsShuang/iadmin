@@ -1,14 +1,19 @@
 package xyz.iotcode.iadmin.demo.module.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysUserRoleQuery;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysRolePermission;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysUserRole;
 import xyz.iotcode.iadmin.demo.module.system.mapper.SysUserRoleMapper;
 import xyz.iotcode.iadmin.demo.module.system.service.SysUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import xyz.iotcode.iadmin.core.wrapper.WrapperFactory;
+
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -22,37 +27,16 @@ import java.util.List;
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper ;
+
     @Override
-    public IPage<SysUserRole> ipage(SysUserRoleQuery query) {
-        return this.page(query.createPage(), new WrapperFactory<SysUserRole>().create(query));
+    public boolean removeByUserId(Integer userId) {
+        return this.remove(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
     }
 
     @Override
-    public boolean isave(SysUserRole param) {
-        return this.save(param);
-    }
-
-    @Override
-    public boolean iupdate(SysUserRole param) {
-        return this.updateById(param);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean iremove(List<Integer> list) {
-        for (Integer integer : list) {
-            this.iremove(integer);
-        }
-        return true;
-    }
-
-    @Override
-    public SysUserRole igetById(Integer id) {
-        return this.getById(id);
-    }
-
-    @Override
-    public boolean iremove(Integer id) {
-        return this.removeById(id);
+    public boolean saveBatch(@NotEmpty List<SysUserRole> sysUserRoles) {
+        return sysUserRoleMapper.saveBatch(sysUserRoles);
     }
 }

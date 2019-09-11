@@ -7,11 +7,15 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import xyz.iotcode.iadmin.common.validated.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,7 +37,7 @@ public class SysUser extends Model<SysUser> {
 
     private static final long serialVersionUID=1L;
 
-    @NotNull(message = "用户id不能为空")
+    @NotNull(groups = Update.class, message = "用户id不能为空")
     @ApiModelProperty(value = "用户id")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
@@ -43,6 +47,7 @@ public class SysUser extends Model<SysUser> {
     @TableField("username")
     private String username;
 
+    @JsonIgnore
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码")
     @TableField("password")
@@ -95,16 +100,17 @@ public class SysUser extends Model<SysUser> {
     @TableField("state")
     private Integer state;
 
-    @NotNull(message = "注册时间不能为空")
     @ApiModelProperty(value = "注册时间")
     @TableField("create_time")
     private Date createTime;
 
-    @NotNull(message = "修改时间不能为空")
     @ApiModelProperty(value = "修改时间")
     @TableField("update_time")
     private Date updateTime;
 
+    @ApiModelProperty(value = "角色id集合")
+    @TableField(exist = false)
+    private List<Integer> roleIds;
 
     @Override
     protected Serializable pkVal() {

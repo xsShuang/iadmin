@@ -8,6 +8,7 @@ import java.util.Collection;
  */
 public class PermissionUser {
 
+    private Object userId;
     /**
      * 用户名
      */
@@ -22,6 +23,11 @@ public class PermissionUser {
      * 角色
      */
     private Collection<String> roles;
+
+    /**
+     * 权限
+     */
+    private Collection<String> permissions;
 
     /**
      * 状态（1启用，0禁用）
@@ -58,5 +64,21 @@ public class PermissionUser {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public Object getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Object userId) {
+        this.userId = userId;
+    }
+
+    public Collection<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Collection<String> permissions) {
+        this.permissions = permissions;
     }
 }

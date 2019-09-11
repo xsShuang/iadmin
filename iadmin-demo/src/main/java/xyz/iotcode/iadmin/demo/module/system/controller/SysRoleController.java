@@ -75,7 +75,8 @@ public class SysRoleController {
     @ApiOperation(value="新增角色数据接口", nickname="SysRole:add")
     @PostMapping("/add")
     public IResult addSysRole(@Validated({Insert.class}) SysRole param) {
-        return IResult.auto(sysRoleService.isave(param));
+        param.setRoleId(null);
+        return IResult.auto(sysRoleService.isaveOrUpdate(param));
     }
 
     /**
@@ -89,7 +90,7 @@ public class SysRoleController {
     @ApiOperation(value="更新角色数据接口", nickname="SysRole:update")
     @PostMapping("/update")
     public IResult updateSysRoleById(@Validated({Update.class}) SysRole param) {
-        return IResult.auto(sysRoleService.iupdate(param));
+        return IResult.auto(sysRoleService.isaveOrUpdate(param));
     }
 
     /**

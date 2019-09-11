@@ -9,5 +9,16 @@
         <result column="role_id" property="roleId" />
         <result column="create_time" property="createTime" />
     </resultMap>
+    <insert id="saveBatch">
+        insert into sys_user_role
+        (user_id,role_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userId},
+            #{item.roleId}
+            )
+        </foreach>
+    </insert>
 
 </mapper>

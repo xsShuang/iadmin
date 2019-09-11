@@ -14,6 +14,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import xyz.iotcode.iadmin.common.validated.Insert;
+import xyz.iotcode.iadmin.common.validated.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,7 +37,7 @@ public class SysRole extends Model<SysRole> {
 
     private static final long serialVersionUID=1L;
 
-    @NotNull(message = "角色id不能为空")
+    @NotNull(groups = Update.class, message = "角色id不能为空")
     @ApiModelProperty(value = "角色id")
     @TableId(value = "role_id", type = IdType.AUTO)
     private Integer roleId;
@@ -49,12 +51,10 @@ public class SysRole extends Model<SysRole> {
     @TableField("comments")
     private String comments;
 
-    @NotNull(message = "创建时间不能为空")
     @ApiModelProperty(value = "创建时间")
     @TableField("create_time")
     private Date createTime;
 
-    @NotNull(message = "修改时间不能为空")
     @ApiModelProperty(value = "修改时间")
     @TableField("update_time")
     private Date updateTime;

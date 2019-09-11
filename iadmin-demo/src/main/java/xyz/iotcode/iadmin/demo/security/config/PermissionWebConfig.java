@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import xyz.iotcode.iadmin.demo.security.provider.Iprovider;
 import xyz.iotcode.iadmin.permissions.interceptor.PermissionInterceptor;
+import xyz.iotcode.iadmin.permissions.properties.ISecurityProperties;
 
 /**
  * @author xieshuang
@@ -17,11 +18,14 @@ public class PermissionWebConfig implements WebMvcConfigurer {
 
     @Autowired
     private Iprovider iprovider;
+    @Autowired
+    private ISecurityProperties iSecurityProperties;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration interceptorRegistration = registry.addInterceptor(new PermissionInterceptor(iprovider, iprovider));
+        InterceptorRegistration interceptorRegistration = registry.addInterceptor(new PermissionInterceptor(iprovider, iSecurityProperties));
         interceptorRegistration.addPathPatterns("/**");
+        interceptorRegistration.excludePathPatterns("/error");
     }
 
 }

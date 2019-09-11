@@ -28,6 +28,8 @@ public interface SysPermissionService extends IService<SysPermission> {
             @CacheEvict(cacheNames = "cache-SysPermission-page", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysPermission-byUrl", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysPermission-code", allEntries = true),
+            @CacheEvict(cacheNames = "cache-SysPermission-ByUserId", allEntries = true),
+            @CacheEvict(cacheNames = "cache-SysPermission-ByRoleId", allEntries = true),
             @CacheEvict(cacheNames = "cache-SysPermission-byId", key = "#param.id" )
     })
     boolean iupdate(SysPermission param);
@@ -41,6 +43,8 @@ public interface SysPermissionService extends IService<SysPermission> {
         @CacheEvict(cacheNames = "cache-SysPermission-page", allEntries = true),
         @CacheEvict(cacheNames = "cache-SysPermission-byUrl", allEntries = true),
         @CacheEvict(cacheNames = "cache-SysPermission-code", allEntries = true),
+        @CacheEvict(cacheNames = "cache-SysPermission-ByUserId", allEntries = true),
+        @CacheEvict(cacheNames = "cache-SysPermission-ByRoleId", allEntries = true),
         @CacheEvict(cacheNames = "cache-SysPermission-byId", key = "#id" )
     })
     boolean iremove(Integer id);
@@ -50,4 +54,10 @@ public interface SysPermissionService extends IService<SysPermission> {
 
     @Cacheable(cacheNames = "cache-SysPermission-code", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
     SysPermission getByCode(String code);
+
+    @Cacheable(cacheNames = "cache-SysPermission-ByUserId", key = "#userId", unless = "#result==null")
+    List<SysPermission> getByUserId(Integer userId);
+
+    @Cacheable(cacheNames = "cache-SysPermission-ByRoleId",  key = "#roleId", unless = "#result==null")
+    List<SysPermission> getByRoleId(Integer roleId);
 }
