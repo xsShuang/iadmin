@@ -34,7 +34,7 @@ public class MybatisPlusGenerator {
         boolean isModule = true;
         // 包路径
         String packAge = MybatisPlusGenerator.class.getPackage().getName();
-        String package1 = packAge+".module.test";
+        String package1 = packAge+".module.log";
         // 作者
         String author = "谢霜";
         // 数据库url
@@ -48,7 +48,7 @@ public class MybatisPlusGenerator {
         // 逻辑删除字段，不要为null或者空
         String logicDeleteFieldName = "deleted";
         // 需要生成的表，正则表达式匹配前缀
-        String tableName = "^sys.*";
+        String tableName = "^sys_login.*";
         String[] ExcludeTable = new String[]{};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[]{""};
@@ -58,7 +58,7 @@ public class MybatisPlusGenerator {
         // 是否启用保存日志注解
         boolean enableSaveLog = true;
         // 是否启用redis
-        boolean enableRedis = true;
+        boolean enableRedis = false;
         // 是否在entity生成jsr303校验注解
         boolean enableValidator = true;
         // 是否生成 CRUD代码

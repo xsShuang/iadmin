@@ -19,6 +19,7 @@ import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -109,26 +110,26 @@ public class SysPermissionController {
     }
 
     /**
-     * @description : 更新权限
+     * @description : 根据用户id获取权限信息
      * ---------------------------------
      * @author : 谢霜
      * @since : Create in 2019-08-28
      */
     @ApiOperation(value="根据用户id获取权限信息", nickname="SysPermission:getByUserId")
     @PostMapping("/getByUserId/{id}")
-    public IResult<List<SysPermission>> getByUserId(@NotNull @PathVariable(value = "id") Integer id) {
+    public IResult<Set<SysPermission>> getByUserId(@NotNull @PathVariable(value = "id") Integer id) {
         return IResult.ok(sysPermissionService.getByUserId(id));
     }
 
     /**
-     * @description : 通过id删除权限
+     * @description : 根据角色id获取权限信息
      * ---------------------------------
      * @author : 谢霜
      * @since : Create in 2019-08-28
      */
     @ApiOperation(value="根据角色id获取权限信息", nickname="SysPermission:getByRoleId")
     @PostMapping("/getByRoleId/{id}")
-    public IResult<List<SysPermission>> getByRoleId(@NotNull @PathVariable(value = "id") Integer id) {
+    public IResult<Set<SysPermission>> getByRoleId(@NotNull @PathVariable(value = "id") Integer id) {
         return IResult.ok(sysPermissionService.getByRoleId(id));
     }
 

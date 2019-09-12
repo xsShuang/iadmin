@@ -16,22 +16,5 @@
         <result column="type" property="type" />
         <result column="component_url" property="componentUrl" />
     </resultMap>
-    <select id="getByUserId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysPermission">
-        SELECT
-            rp.*
-        FROM
-            sys_user_role ur
-            JOIN sys_role_permission rp ON ur.role_id = rp.role_id
-            AND ur.user_id = #{id}
-            JOIN sys_permission p ON rp.permission_id = p.id
-    </select>
-    <select id="getByRoleId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysPermission">
-        SELECT
-            rp.*
-        FROM
-            sys_role_permission rp
-            JOIN sys_permission p ON rp.permission_id = p.id
-            AND rp.role_id = #{id}
-    </select>
 
 </mapper>

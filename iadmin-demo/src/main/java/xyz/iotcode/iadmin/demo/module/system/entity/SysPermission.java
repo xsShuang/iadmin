@@ -57,18 +57,9 @@ public class SysPermission extends Model<SysPermission> {
     @TableField("sort")
     private Integer sort;
 
-    @ApiModelProperty(value = "创建时间")
-    @TableField("create_time")
-    private Date createTime;
-
     @ApiModelProperty(value = "url")
     @TableField("url")
     private String url;
-
-    @NotNull(message = "状态不能为空")
-    @ApiModelProperty(value = "状态（0不需要验证，1需要登录，2需要验证）")
-    @TableField("state")
-    private Integer state;
 
     @ApiModelProperty(value = "请求方式")
     @TableField("request_way")
@@ -83,6 +74,13 @@ public class SysPermission extends Model<SysPermission> {
     @TableField("component_url")
     private String componentUrl;
 
+    @ApiModelProperty(value = "创建时间")
+    @TableField("create_time")
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改时间")
+    @TableField("update_time")
+    private Date updateTime;
 
     @Override
     protected Serializable pkVal() {

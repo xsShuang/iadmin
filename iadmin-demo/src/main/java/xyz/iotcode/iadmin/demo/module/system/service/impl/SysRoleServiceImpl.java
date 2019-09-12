@@ -77,8 +77,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return this.getById(id);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean iremove(Integer id) {
+        sysRolePermissionService.removeByRoleId(id);
         return this.removeById(id);
     }
 

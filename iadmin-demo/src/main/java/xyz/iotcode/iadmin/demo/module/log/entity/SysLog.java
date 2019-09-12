@@ -64,6 +64,10 @@ public class SysLog extends Model<SysLog> {
     @TableField("request_ip")
     private String requestIp;
 
+    @ApiModelProperty(value = "address")
+    @TableField("address")
+    private String address;
+
     @ApiModelProperty(value = "用时")
     @TableField("time")
     private Long time;
@@ -71,14 +75,6 @@ public class SysLog extends Model<SysLog> {
     @ApiModelProperty(value = "用户名")
     @TableField("username")
     private String username;
-
-    @ApiModelProperty(value = "开始时间")
-    @TableField("begin_time")
-    private Date beginTime;
-
-    @ApiModelProperty(value = "结束时间")
-    @TableField("end_time")
-    private Date endTime;
 
     @ApiModelProperty(value = "日志级别（1一般，2敏感，3危险）")
     @TableField("log_level")

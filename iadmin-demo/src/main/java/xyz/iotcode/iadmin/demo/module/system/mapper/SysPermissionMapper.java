@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysRole;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -17,7 +18,4 @@ import java.util.List;
  */
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 
-    List<SysPermission> getByUserId(@Param("id") Integer id);
-
-    List<SysPermission> getByRoleId(@Param("id") Integer id);
 }

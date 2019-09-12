@@ -1,5 +1,6 @@
 package xyz.iotcode.iadmin.demo.module.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,12 +8,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysPermissionQuery;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysRole;
 import xyz.iotcode.iadmin.demo.module.system.mapper.SysPermissionMapper;
 import xyz.iotcode.iadmin.demo.module.system.service.SysPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import xyz.iotcode.iadmin.core.wrapper.WrapperFactory;
+import xyz.iotcode.iadmin.demo.module.system.service.SysRolePermissionService;
+import xyz.iotcode.iadmin.demo.module.system.service.SysRoleService;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -26,7 +33,9 @@ import java.util.List;
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 
     @Autowired
-    private SysPermissionMapper sysPermissionMapper;
+    private SysRolePermissionService sysRolePermissionService;
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Override
     public IPage<SysPermission> ipage(SysPermissionQuery query) {
@@ -84,12 +93,20 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    public List<SysPermission> getByUserId(Integer userId) {
-        return sysPermissionMapper.getByUserId(userId);
+    public Set<SysPermission> getByUserId(Integer userId) {
+        Set<SysPermission> sysPermissions = new HashSet<>();
+        List<SysRole> byUserId = sysRoleService.getByUserId(userId);
+        if (CollectionUtil.isNotEmpty(byUserId)){
+            for (int i = 0; i < byUserId.size(); i++) {
+                sysPermissions.addAll(sysRolePermissionService.getByRoleId(byUserId.get(i).getRoleId()));
+            }
+        }
+        return sysPermissions;
     }
 
     @Override
-    public List<SysPermission> getByRoleId(Integer roleId) {
-        return sysPermissionMapper.getByRoleId(roleId);
+    public Set<SysPermission> getByRoleId(Integer roleId) {
+        return sysRolePermissionService.getByRoleId(roleId);
     }
+
 }

@@ -21,4 +21,13 @@
         </foreach>
     </insert>
 
+    <select id="getByRoleId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysPermission">
+        SELECT
+            rp.*
+        FROM
+            sys_role_permission rp
+            JOIN sys_permission p ON rp.permission_id = p.id
+            AND rp.role_id = #{id}
+    </select>
+
 </mapper>

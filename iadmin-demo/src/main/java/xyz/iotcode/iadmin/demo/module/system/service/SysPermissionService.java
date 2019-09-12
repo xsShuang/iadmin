@@ -8,6 +8,8 @@ import xyz.iotcode.iadmin.demo.module.system.controller.query.SysPermissionQuery
 import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
+import java.util.Set;
+
 /**
  * <p>
  * 权限 服务类
@@ -55,9 +57,8 @@ public interface SysPermissionService extends IService<SysPermission> {
     @Cacheable(cacheNames = "cache-SysPermission-code", keyGenerator = "cacheKeyGenerator", unless = "#result==null")
     SysPermission getByCode(String code);
 
-    @Cacheable(cacheNames = "cache-SysPermission-ByUserId", key = "#userId", unless = "#result==null")
-    List<SysPermission> getByUserId(Integer userId);
+    Set<SysPermission> getByUserId(Integer userId);
 
-    @Cacheable(cacheNames = "cache-SysPermission-ByRoleId",  key = "#roleId", unless = "#result==null")
-    List<SysPermission> getByRoleId(Integer roleId);
+    Set<SysPermission> getByRoleId(Integer roleId);
+
 }

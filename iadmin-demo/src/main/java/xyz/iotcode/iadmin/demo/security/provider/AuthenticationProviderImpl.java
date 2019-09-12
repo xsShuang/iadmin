@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
 import xyz.iotcode.iadmin.common.redis.RedisService;
+import xyz.iotcode.iadmin.demo.module.log.entity.SysLoginLog;
+import xyz.iotcode.iadmin.demo.module.log.service.SysLoginLogService;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 import xyz.iotcode.iadmin.demo.module.system.service.SysPermissionService;
 import xyz.iotcode.iadmin.demo.security.bean.LoginDTO;
@@ -18,6 +20,7 @@ import xyz.iotcode.iadmin.demo.security.bean.LoginSuccessVO;
 import xyz.iotcode.iadmin.permissions.bean.PermissionUser;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,6 +49,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     private SysRoleService sysRoleService;
     @Autowired
     private SysPermissionService sysPermissionService;
+    @Autowired
+    private SysLoginLogService sysLoginLogService;
 
     @Override
     public LoginSuccessVO login(LoginDTO dto) {
@@ -71,12 +76,17 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         if (CollectionUtil.isNotEmpty(roles)){
             user.setRoles(roles.stream().map(SysRole::getLabel).collect(Collectors.toList()));
         }
-        List<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getUserId());
+        Set<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getUserId());
         if (CollectionUtil.isNotEmpty(permissions)){
             user.setPermissions(permissions.stream().map(SysPermission::getPermissionCode).collect(Collectors.toList()));
         }
         String s = UUID.randomUUID().toString();
         redisService.set(s, user, time);
+
+        SysLoginLog loginLog = new SysLoginLog();
+        loginLog.setUsername(dto.getUsername());
+        sysLoginLogService.isave(loginLog);
+
         LoginSuccessVO vo = new LoginSuccessVO();
         vo.setPermissionCodes(user.getPermissions());
         vo.setUserInfo(sysUser);
@@ -90,7 +100,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     public PermissionUser getUserByToken(String token) {
         PermissionUser user = (PermissionUser) redisService.get(token);
         if (user==null){
-            throw new MyRuntimeException("token 已过期");
+            throw new MyRuntimeException("token无效");
         }
         return user;
     }

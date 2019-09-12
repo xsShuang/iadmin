@@ -22,7 +22,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermissionInterceptor implements HandlerInterceptor {
 
-    public static String TOKEN = "token";
+    public final static String TOKEN = "token";
+    private final static String SUPER_ADMIN = "superAdmin";
+    private final static String NO_LOGIN = "未登录";
+    private final static String NO_PERMISSION = "无权限";
 
     public PermissionInterceptor(UserProvider userProvider, ISecurityProperties properties){
         super();
@@ -75,13 +78,18 @@ public class PermissionInterceptor implements HandlerInterceptor {
             }
             PermissionUser permissionUser = getPermissionUser(request);
             if (permissionUser==null){
-                throw new MyRuntimeException("未登录", 401);
+                throw new MyRuntimeException(NO_LOGIN, 401);
             }
             if (StringUtils.isBlank(iPermissions.value())){
                 return true;
             }
+            if (CollectionUtil.isNotEmpty(permissionUser.getRoles())){
+                if (permissionUser.getRoles().contains(SUPER_ADMIN)){
+                    return true;
+                }
+            }
             if (CollectionUtil.isEmpty(permissionUser.getPermissions())){
-                throw new MyRuntimeException("无权限", 403);
+                throw new MyRuntimeException(NO_PERMISSION, 403);
             }
             if (permissionUser.getPermissions().contains(iPermissions.value())){
                 return true;

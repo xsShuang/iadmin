@@ -28,79 +28,24 @@ public class LogAspect {
     @Autowired
     private SysLogService sysLogService;
 
-    private Date date;
-
-
     @Pointcut("@annotation(xyz.iotcode.iadmin.core.common.log.SaveLog)")
     public void logPointcut() {
     }
 
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = null;
-        Date beginTime = new Date();
-        date = beginTime;
+        Object result;
+        long beginTime = System.currentTimeMillis();
         result = joinPoint.proceed();
-        Date endTime = new Date();
         SysLog sysLog = new SysLog();
-        sysLog.setBeginTime(beginTime);
-        sysLog.setEndTime(endTime);
-        sysLog.setTime(endTime.getTime()-beginTime.getTime());
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        String methodName = joinPoint.getTarget().getClass().getName()+"."+signature.getName()+"()";
-        String params = "{";
-        //参数值
-        Object[] argValues = joinPoint.getArgs();
-        //参数名称
-        String[] argNames = ((MethodSignature)joinPoint.getSignature()).getParameterNames();
-        if(argValues != null){
-            for (int i = 0; i < argValues.length; i++) {
-                params += " " + argNames[i] + ": " + argValues[i];
-            }
-        }
-        SaveLog log = method.getAnnotation(SaveLog.class);
-        sysLog.setDescription(log.value());
+        // 执行时长(毫秒)
+        long time = System.currentTimeMillis() - beginTime;
         sysLog.setLogType("info");
-        sysLog.setLogLevel(log.level());
+        sysLog.setTime(time);
         sysLog.setUsername(getUsername());
         sysLog.setRequestIp(IPUtil.getIpAddr());
-        sysLog.setMethod(methodName);
-        sysLog.setParams(params+ " }");
-        sysLogService.isave(sysLog);
+        sysLogService.isave(joinPoint, sysLog);
         return result;
-    }
-
-    @AfterThrowing(pointcut = "logPointcut()", throwing = "e")
-    public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        Date endTime = new Date();
-        SysLog sysLog = new SysLog();
-        sysLog.setBeginTime(date);
-        sysLog.setEndTime(endTime);
-        sysLog.setTime(endTime.getTime()-date.getTime());
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        String methodName = joinPoint.getTarget().getClass().getName()+"."+signature.getName()+"()";
-        String params = "{";
-        //参数值
-        Object[] argValues = joinPoint.getArgs();
-        //参数名称
-        String[] argNames = ((MethodSignature)joinPoint.getSignature()).getParameterNames();
-        if(argValues != null){
-            for (int i = 0; i < argValues.length; i++) {
-                params += " " + argNames[i] + ": " + argValues[i];
-            }
-        }
-        SaveLog log = method.getAnnotation(SaveLog.class);
-        sysLog.setExceptionDetail(ThrowableUtil.getStackTrace(e));
-        sysLog.setDescription(log.value());
-        sysLog.setLogType("error");
-        sysLog.setLogLevel(log.level());
-        sysLog.setUsername(getUsername());
-        sysLog.setRequestIp(IPUtil.getIpAddr());
-        sysLog.setMethod(methodName);
-        sysLog.setParams(params+ " }");
-        sysLogService.isave(sysLog);
     }
 
     public String getUsername() {

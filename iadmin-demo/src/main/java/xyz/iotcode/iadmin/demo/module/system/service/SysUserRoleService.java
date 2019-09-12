@@ -33,9 +33,6 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * @param userId
      * @return boolean
      */
-    @Caching(evict = {
-            @CacheEvict(cacheNames = "cache-SysPermission-ByUserId",  key = "#userId")
-    })
     boolean removeByUserId(Integer userId);
 
     /**

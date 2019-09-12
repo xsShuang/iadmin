@@ -2,6 +2,8 @@ package xyz.iotcode.iadmin.demo.module.log.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.scheduling.annotation.Async;
 import xyz.iotcode.iadmin.demo.module.log.controller.query.SysLogQuery;
 import xyz.iotcode.iadmin.demo.module.log.entity.SysLog;
 
@@ -18,7 +20,8 @@ public interface SysLogService extends IService<SysLog> {
 
     IPage<SysLog> ipage(SysLogQuery query);
 
-    boolean isave(SysLog param);
+    @Async("iAsyncThreadPool")
+    boolean isave(ProceedingJoinPoint joinPoint, SysLog param);
 
     boolean iupdate(SysLog param);
 
