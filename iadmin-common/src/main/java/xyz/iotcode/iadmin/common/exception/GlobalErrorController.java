@@ -54,7 +54,7 @@ public class GlobalErrorController implements ErrorController {
      */
     @RequestMapping
     public IResult<ErrorInfo> error(HttpServletRequest request, HttpServletResponse response) {
-        response.setStatus(200);
+        //response.setStatus(200);
         ErrorInfo errorInfo = errorInfoBuilder.getErrorInfo(request);
         return IResult.fail(errorInfo.getStatusCode(), errorInfo.getMessage(), errorInfo);
     }

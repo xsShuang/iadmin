@@ -11,7 +11,7 @@ import java.util.UUID;
 public class SysPermissionControllerTest {
 
     public static void main(String[] args) {
-        String body = HttpRequest.get("http://127.0.0.1:8080/v2/api-docs").execute().body();
+        String body = HttpRequest.get("http://127.0.0.1:10010/v2/api-docs").execute().body();
         System.out.println(body);
         final int[] id = {10000};
         JSONArray jsonArray = new JSONArray();
@@ -23,12 +23,12 @@ public class SysPermissionControllerTest {
             JSONObject node = new JSONObject();
             node.put("id", id[0]++);
             node.put("url", "xx");
-            node.put("name", tag.getString("name"));
+            node.put("permission_name", tag.getString("name"));
             node.put("type", 1);
-            node.put("symbol", UUID.randomUUID());
+            node.put("permission_code", UUID.randomUUID());
             node.put("pid", 0);
             jsonArray.add(node);
-            map.put(node.getString("name"), node.getInteger("id"));
+            map.put(node.getString("permission_name"), node.getInteger("id"));
         }
         JSONObject paths = jsonObject.getJSONObject("paths");
         paths.entrySet().stream().forEach(stringObjectEntry -> {
@@ -42,7 +42,7 @@ public class SysPermissionControllerTest {
                 node.put("state", 1);
                 node.put("request_way", stringObjectEntry1.getKey());
                 node.put("id", id[0]++);
-                node.put("url", "/api"+stringObjectEntry.getKey());
+                node.put("url", stringObjectEntry.getKey());
                 node.put("permission_name", summary);
                 node.put("type", 2);
                 node.put("permission_code", operationId);

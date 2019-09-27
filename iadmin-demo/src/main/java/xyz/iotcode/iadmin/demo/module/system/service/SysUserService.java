@@ -23,7 +23,7 @@ public interface SysUserService extends IService<SysUser> {
 
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache-SysUser-page", allEntries = true),
-            @CacheEvict(cacheNames = "cache-SysUser-byId", key = "#param.id" )
+            @CacheEvict(cacheNames = "cache-SysUser-byId", key = "#param.userId" )
     })
     boolean isaveOrUpdate(SysUser param);
 

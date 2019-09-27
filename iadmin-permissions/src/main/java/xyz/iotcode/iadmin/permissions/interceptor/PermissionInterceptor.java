@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PermissionInterceptor implements HandlerInterceptor {
 
     public final static String TOKEN = "token";
-    private final static String SUPER_ADMIN = "superAdmin";
+    public final static String SUPER_ADMIN = "superAdmin";
     private final static String NO_LOGIN = "未登录";
     private final static String NO_PERMISSION = "无权限";
 

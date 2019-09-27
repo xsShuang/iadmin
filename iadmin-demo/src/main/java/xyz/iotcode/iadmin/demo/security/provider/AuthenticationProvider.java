@@ -1,7 +1,7 @@
 package xyz.iotcode.iadmin.demo.security.provider;
 
 import xyz.iotcode.iadmin.demo.security.bean.LoginDTO;
-import xyz.iotcode.iadmin.demo.security.bean.LoginSuccessVO;
+import xyz.iotcode.iadmin.demo.security.bean.UserInfoVO;
 import xyz.iotcode.iadmin.permissions.bean.PermissionUser;
 
 /**
@@ -14,7 +14,7 @@ public interface AuthenticationProvider {
      * @param dto
      * @return
      */
-    LoginSuccessVO login(LoginDTO dto);
+    String login(LoginDTO dto);
 
     /**
      * 根据token获取用户
@@ -22,4 +22,6 @@ public interface AuthenticationProvider {
      * @return
      */
     PermissionUser getUserByToken(String token);
+
+    UserInfoVO getUserInfoByToken(String token);
 }
