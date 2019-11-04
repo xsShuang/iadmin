@@ -78,14 +78,14 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         }
         PermissionUser user = new PermissionUser();
         BeanUtils.copyProperties(sysUser, user);
-        user.setUserId(sysUser.getUserId());
+        user.setUserId(sysUser.getId());
         // 设置角色
-        List<SysRole> roles = sysRoleService.getByUserId(sysUser.getUserId());
+        List<SysRole> roles = sysRoleService.getByUserId(sysUser.getId());
         if (CollectionUtil.isNotEmpty(roles)){
             user.setRoles(roles.stream().map(SysRole::getLabel).collect(Collectors.toList()));
         }
         // 设置权限
-        Set<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getUserId());
+        Set<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getId());
         if (CollectionUtil.isNotEmpty(permissions)){
             user.setPermissions(permissions.stream().map(SysPermission::getPermissionCode).collect(Collectors.toList()));
         }

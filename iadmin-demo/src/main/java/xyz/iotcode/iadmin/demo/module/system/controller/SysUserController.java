@@ -75,7 +75,7 @@ public class SysUserController {
     @ApiOperation(value="新增用户数据接口", nickname="SysUser:add")
     @PostMapping("/add")
     public IResult addSysUser(@Validated({Insert.class}) SysUser param) {
-        param.setUserId(null);
+        param.setId(null);
         return IResult.auto(sysUserService.isaveOrUpdate(param));
     }
 

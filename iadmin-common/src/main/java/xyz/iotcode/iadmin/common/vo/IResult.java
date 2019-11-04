@@ -1,5 +1,6 @@
 package xyz.iotcode.iadmin.common.vo;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @Description:
  */
 @Data
+@ApiModel("全局返回体")
 public class IResult<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

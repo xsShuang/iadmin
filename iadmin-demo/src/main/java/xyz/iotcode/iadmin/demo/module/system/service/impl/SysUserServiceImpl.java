@@ -45,7 +45,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean isaveOrUpdate(SysUser param) {
-        if (param.getUserId()==null){
+        if (param.getId()==null){
             SysUser one = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, param.getUsername()));
             if (one!=null){
                 throw new MyRuntimeException("用户名已存在");
@@ -60,10 +60,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         this.saveOrUpdate(param);
         if (CollectionUtil.isNotEmpty(param.getRoleIds())){
-            sysUserRoleService.removeByUserId(param.getUserId());
+            sysUserRoleService.removeByUserId(param.getId());
             List<SysUserRole> sysUserRoles = new ArrayList<>();
             for (Integer integer : param.getRoleIds()) {
-                sysUserRoles.add(new SysUserRole().setUserId(param.getUserId()).setRoleId(integer));
+                sysUserRoles.add(new SysUserRole().setUserId(param.getId()).setRoleId(integer));
             }
             sysUserRoleService.saveBatch(sysUserRoles);
         }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,6 +18,8 @@ import java.util.regex.Pattern;
  */
 public class WrapperFactory<T> {
 
+    private static Pattern HUMP_PATTERN = Pattern.compile("[A-Z]");
+    private final static String EMPTY = "";
     private Logger log = LoggerFactory.getLogger(WrapperFactory.class);
 
     public QueryWrapper<T> create(Object dto){
@@ -39,13 +42,17 @@ public class WrapperFactory<T> {
             }
             QueryCondition query = field.getAnnotation(QueryCondition.class);
             if (query != null) {
-                if (!query.condition().equals(QueryCondition.Condition.DEFAULT) && value != null) {
+                if (!query.condition().equals(QueryCondition.Condition.DEFAULT) && !isEmpty(value)) {
                     switch (query.condition()) {
                         case EQ:
                             wrapper.eq(getColumnName(field), value);
                             break;
                         case IN:
-                            wrapper.in(getColumnName(field), (Collection<?>) value);
+                            if (value instanceof Collection){
+                                if (((Collection) value).size() > 0){
+                                    wrapper.in(getColumnName(field), (Collection<?>) value);
+                                }
+                            }
                             break;
                         case LIKE:
                             wrapper.like(getColumnName(field), value);
@@ -84,15 +91,13 @@ public class WrapperFactory<T> {
         return annotation.field();
     }
 
-    private static Pattern humpPattern = Pattern.compile("[A-Z]");
-
     /**
      * 驼峰转下换线
      * @param str
      * @return
      */
     private String humpToLine(String str) {
-        Matcher matcher = humpPattern.matcher(str);
+        Matcher matcher = HUMP_PATTERN.matcher(str);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
@@ -101,24 +106,35 @@ public class WrapperFactory<T> {
         return sb.toString();
     }
 
-    public static Field[] getAllFields(final Class<?> cls) {
+    private static Field[] getAllFields(final Class<?> cls) {
         final List<Field> allFieldsList = getAllFieldsList(cls);
-        return allFieldsList.toArray(new Field[allFieldsList.size()]);
+        return allFieldsList.toArray(new Field[0]);
     }
 
-    public static List<Field> getAllFieldsList(final Class<?> cls) {
+    private static List<Field> getAllFieldsList(final Class<?> cls) {
         if (cls==null){
             throw new IllegalArgumentException("The class must not be null");
         }
-        final List<Field> allFields = new ArrayList<Field>();
+        final List<Field> allFields = new ArrayList<>();
         Class<?> currentClass = cls;
         while (currentClass != null) {
             final Field[] declaredFields = currentClass.getDeclaredFields();
-            for (final Field field : declaredFields) {
-                allFields.add(field);
-            }
+            allFields.addAll(Arrays.asList(declaredFields));
             currentClass = currentClass.getSuperclass();
         }
         return allFields;
+    }
+
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) {
+            return true;
+        }
+        if ((obj instanceof Collection)) {
+            return ((Collection) obj).size() == 0;
+        }
+        if ((obj instanceof String)) {
+            return EMPTY.equals(((String) obj).trim());
+        }
+        return false;
     }
 }

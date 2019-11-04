@@ -39,8 +39,8 @@ public class SysUser extends Model<SysUser> {
 
     @NotNull(groups = Update.class, message = "用户id不能为空")
     @ApiModelProperty(value = "用户id")
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     @NotBlank(message = "账号不能为空")
     @ApiModelProperty(value = "账号")
@@ -114,7 +114,7 @@ public class SysUser extends Model<SysUser> {
 
     @Override
     protected Serializable pkVal() {
-        return this.userId;
+        return this.id;
     }
 
 }

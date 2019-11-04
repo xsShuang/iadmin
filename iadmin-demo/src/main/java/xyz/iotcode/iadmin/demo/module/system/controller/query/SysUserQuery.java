@@ -28,7 +28,7 @@ public class SysUserQuery extends PageDTO implements Serializable {
 
     @ApiModelProperty(value = "用户id")
     @QueryCondition
-    private Integer userId;
+    private Integer id;
 
 
     @ApiModelProperty(value = "账号")

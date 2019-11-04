@@ -28,7 +28,7 @@ public class SysRoleQuery extends PageDTO implements Serializable {
 
     @ApiModelProperty(value = "角色id")
     @QueryCondition
-    private Integer roleId;
+    private Integer id;
 
 
     @ApiModelProperty(value = "角色名称")

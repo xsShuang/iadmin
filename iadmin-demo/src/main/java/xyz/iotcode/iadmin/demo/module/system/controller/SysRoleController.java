@@ -75,7 +75,7 @@ public class SysRoleController {
     @ApiOperation(value="新增角色数据接口", nickname="SysRole:add")
     @PostMapping("/add")
     public IResult addSysRole(@Validated({Insert.class}) SysRole param) {
-        param.setRoleId(null);
+        param.setId(null);
         return IResult.auto(sysRoleService.isaveOrUpdate(param));
     }
 

@@ -98,7 +98,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         List<SysRole> byUserId = sysRoleService.getByUserId(userId);
         if (CollectionUtil.isNotEmpty(byUserId)){
             for (int i = 0; i < byUserId.size(); i++) {
-                sysPermissions.addAll(sysRolePermissionService.getByRoleId(byUserId.get(i).getRoleId()));
+                sysPermissions.addAll(sysRolePermissionService.getByRoleId(byUserId.get(i).getId()));
             }
         }
         return sysPermissions;

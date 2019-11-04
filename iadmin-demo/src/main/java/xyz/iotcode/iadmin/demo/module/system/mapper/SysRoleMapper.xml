@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="xyz.iotcode.iadmin.demo.module.system.entity.SysRole">
-        <id column="role_id" property="roleId" />
+        <id column="id" property="id" />
         <result column="role_name" property="roleName" />
         <result column="comments" property="comments" />
         <result column="create_time" property="createTime" />
@@ -18,14 +18,14 @@
             sys_permission sp
             JOIN sys_role_permission rp ON sp.id = rp.permission_id
             AND sp.id = #{id}
-            JOIN sys_role r ON rp.role_id = r.role_id
+            JOIN sys_role r ON rp.role_id = r.id
     </select>
     <select id="getByUserId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysRole">
         SELECT
             r.*
         FROM
             sys_user_role ur
-            JOIN sys_role r ON ur.role_id = r.role_id
+            JOIN sys_role r ON ur.role_id = r.id
             AND ur.user_id = #{id}
     </select>
 

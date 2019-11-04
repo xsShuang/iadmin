@@ -43,7 +43,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean isaveOrUpdate(SysRole param) {
-        if (param.getRoleId()==null){
+        if (param.getId()==null){
             SysRole one = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getLabel, param.getLabel()));
             if (one!=null){
                 throw new MyRuntimeException("角色标识已存在");
@@ -53,10 +53,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         this.saveOrUpdate(param);
         if (CollectionUtil.isNotEmpty(param.getPermissionIdList())){
-            sysRolePermissionService.removeByRoleId(param.getRoleId());
+            sysRolePermissionService.removeByRoleId(param.getId());
             List<SysRolePermission> sysRolePermissionList = new ArrayList<>();
             for (Integer integer : param.getPermissionIdList()) {
-                sysRolePermissionList.add(new SysRolePermission().setRoleId(param.getRoleId()).setPermissionId(integer));
+                sysRolePermissionList.add(new SysRolePermission().setRoleId(param.getId()).setPermissionId(integer));
             }
             sysRolePermissionService.saveBatch(sysRolePermissionList);
         }

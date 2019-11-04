@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author xieshuang
+ */
 public class RedisKeyConfig extends CachingConfigurerSupport {
  
 	/**
