@@ -21,10 +21,7 @@ import xyz.iotcode.iadmin.demo.module.system.service.SysRoleService;
 import xyz.iotcode.iadmin.demo.security.bean.UserInfoVO;
 import xyz.iotcode.iadmin.permissions.bean.PermissionUser;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static xyz.iotcode.iadmin.permissions.interceptor.PermissionInterceptor.SUPER_ADMIN;
@@ -83,11 +80,15 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         List<SysRole> roles = sysRoleService.getByUserId(sysUser.getId());
         if (CollectionUtil.isNotEmpty(roles)){
             user.setRoles(roles.stream().map(SysRole::getLabel).collect(Collectors.toList()));
+        }else {
+            user.setRoles(Collections.emptySet());
         }
         // 设置权限
         Set<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getId());
         if (CollectionUtil.isNotEmpty(permissions)){
             user.setPermissions(permissions.stream().map(SysPermission::getPermissionCode).collect(Collectors.toList()));
+        }else {
+            user.setPermissions(Collections.emptySet());
         }
         if (CollectionUtil.isNotEmpty(user.getRoles())){
             if (user.getRoles().contains(SUPER_ADMIN)){

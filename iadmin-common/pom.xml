@@ -3,18 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.xs0529</groupId>
+        <groupId>xyz.iotcode</groupId>
         <artifactId>iadmin</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
-    <groupId>com.github.xs0529</groupId>
+    <groupId>xyz.iotcode</groupId>
     <artifactId>iadmin-common</artifactId>
     <version>${project.release.version}</version>
     <name>iadmin-common</name>
     <description>iadmin 公共依赖</description>
 
     <properties>
-        <project.release.version>1.0.1</project.release.version>
+        <project.release.version>1.0.2</project.release.version>
         <skipTests>true</skipTests>
         <java.version>1.8</java.version>
     </properties>

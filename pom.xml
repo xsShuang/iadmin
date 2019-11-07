@@ -8,9 +8,9 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.github.xs0529</groupId>
+    <groupId>xyz.iotcode</groupId>
     <artifactId>iadmin</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>iadmin</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
@@ -129,7 +129,20 @@
             </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>
+                https://oss.sonatype.org/content/repositories/snapshots
+            </url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>
+                https://oss.sonatype.org/service/local/staging/deploy/maven2
+            </url>
+        </repository>
+    </distributionManagement>
     <profiles>
         <profile>
             <id>sonatype-oss-release</id>
