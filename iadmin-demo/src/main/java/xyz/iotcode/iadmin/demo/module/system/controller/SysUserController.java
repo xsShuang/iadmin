@@ -5,8 +5,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import xyz.iotcode.iadmin.common.exception.MyRuntimeException;
 import xyz.iotcode.iadmin.common.validated.Insert;
 import xyz.iotcode.iadmin.common.validated.Update;
 import xyz.iotcode.iadmin.common.vo.IResult;
@@ -16,6 +18,7 @@ import xyz.iotcode.iadmin.demo.module.system.entity.SysUser;
 import xyz.iotcode.iadmin.demo.module.system.service.SysUserService;
 import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +77,7 @@ public class SysUserController {
     @IPermissions(value="SysUser:add")
     @ApiOperation(value="新增用户数据接口", nickname="SysUser:add")
     @PostMapping("/add")
-    public IResult addSysUser(@Validated({Insert.class}) SysUser param) {
+    public IResult addSysUser(@Valid SysUser param) {
         param.setId(null);
         return IResult.auto(sysUserService.isaveOrUpdate(param));
     }
@@ -89,7 +92,10 @@ public class SysUserController {
     @IPermissions(value="SysUser:update")
     @ApiOperation(value="更新用户数据接口", nickname="SysUser:update")
     @PostMapping("/update")
-    public IResult updateSysUserById(@Validated({Update.class}) SysUser param) {
+    public IResult updateSysUserById(@Valid SysUser param) {
+        if (param.getId()==null){
+            throw new MyRuntimeException("id不能为空");
+        }
         return IResult.auto(sysUserService.isaveOrUpdate(param));
     }
 
@@ -103,9 +109,13 @@ public class SysUserController {
     @IPermissions(value="SysUser:del")
     @ApiOperation(value="删除用户数据接口", nickname="SysUser:del")
     @PostMapping("/remove/{id}")
+    @Transactional(rollbackFor = Exception.class)
     public IResult deleteSysUserById(@PathVariable(value = "id") String id) {
-        List<Integer> list = Arrays.asList(id.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
-        return IResult.auto(sysUserService.iremove(list));
+        List<Integer> list = Arrays.stream(id.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        for (Integer integer : list) {
+            sysUserService.iremove(integer);
+        }
+        return IResult.ok();
     }
 
 }

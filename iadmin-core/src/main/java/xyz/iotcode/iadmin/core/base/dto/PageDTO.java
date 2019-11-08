@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @ApiModel("分页DTO")
-public class PageDTO {
+public class PageDTO extends BaseDto {
 
     @NotNull(message = "页码不能为空")
     @ApiModelProperty(value = "页码", required = true, example = "1")

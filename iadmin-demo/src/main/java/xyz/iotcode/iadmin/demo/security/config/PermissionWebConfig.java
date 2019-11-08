@@ -13,7 +13,7 @@ import xyz.iotcode.iadmin.permissions.properties.ISecurityProperties;
  * @author xieshuang
  * @date 2019-08-23 16:03
  */
-//@Configuration
+@Configuration
 public class PermissionWebConfig implements WebMvcConfigurer {
 
     @Autowired

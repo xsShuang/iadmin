@@ -86,19 +86,19 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         // 设置权限
         Set<SysPermission> permissions = sysPermissionService.getByUserId(sysUser.getId());
         if (CollectionUtil.isNotEmpty(permissions)){
-            user.setPermissions(permissions.stream().map(SysPermission::getPermissionCode).collect(Collectors.toList()));
+            user.setPermissions(permissions.stream().map(SysPermission::getPermissionCode).collect(Collectors.toSet()));
         }else {
             user.setPermissions(Collections.emptySet());
         }
         if (CollectionUtil.isNotEmpty(user.getRoles())){
+            // 如果是超级管理管理员，设置所有权限
             if (user.getRoles().contains(SUPER_ADMIN)){
                 SysPermissionQuery query = new SysPermissionQuery();
                 query.setPage(1);
                 query.setSize(100000);
                 List<SysPermission> records = sysPermissionService.ipage(query).getRecords();
-                permissions = new HashSet<>(records);
                 if (CollectionUtil.isNotEmpty(records)){
-                    user.setPermissions(records.stream().map(SysPermission::getPermissionCode).collect(Collectors.toList()));
+                    user.setPermissions(records.stream().map(SysPermission::getPermissionCode).collect(Collectors.toSet()));
                 }
             }
         }
@@ -116,7 +116,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     public PermissionUser getUserByToken(String token) {
         PermissionUser user = (PermissionUser) redisService.get(token);
         if (user==null){
-            throw new MyRuntimeException("token无效");
+            throw new MyRuntimeException("token无效", 401);
         }
         return user;
     }

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -37,7 +38,6 @@ public class SysUser extends Model<SysUser> {
 
     private static final long serialVersionUID=1L;
 
-    @NotNull(groups = Update.class, message = "用户id不能为空")
     @ApiModelProperty(value = "用户id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -48,7 +48,6 @@ public class SysUser extends Model<SysUser> {
     private String username;
 
     @JsonIgnore
-    @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码")
     @TableField("password")
     private String password;
@@ -110,7 +109,7 @@ public class SysUser extends Model<SysUser> {
 
     @ApiModelProperty(value = "角色id集合")
     @TableField(exist = false)
-    private List<Integer> roleIds;
+    private Set<Integer> roleIds;
 
     @Override
     protected Serializable pkVal() {

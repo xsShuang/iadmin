@@ -21,6 +21,7 @@ import xyz.iotcode.iadmin.core.wrapper.WrapperFactory;
 import xyz.iotcode.iadmin.demo.security.provider.AuthenticationProviderImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -59,23 +60,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             param.setPassword(null);
         }
         this.saveOrUpdate(param);
-        if (CollectionUtil.isNotEmpty(param.getRoleIds())){
-            sysUserRoleService.removeByUserId(param.getId());
-            List<SysUserRole> sysUserRoles = new ArrayList<>();
-            for (Integer integer : param.getRoleIds()) {
-                sysUserRoles.add(new SysUserRole().setUserId(param.getId()).setRoleId(integer));
-            }
-            sysUserRoleService.saveBatch(sysUserRoles);
+        if (CollectionUtil.isEmpty(param.getRoleIds())){
+            param.setRoleIds(new HashSet<>());
         }
-        return true;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean iremove(List<Integer> list) {
-        for (Integer integer : list) {
-            this.iremove(integer);
+        // 所有用户都必须默认一个“普通用户”角色
+        param.getRoleIds().add(2);
+        sysUserRoleService.removeByUserId(param.getId());
+        List<SysUserRole> sysUserRoles = new ArrayList<>();
+        for (Integer integer : param.getRoleIds()) {
+            sysUserRoles.add(new SysUserRole().setUserId(param.getId()).setRoleId(integer));
         }
+        sysUserRoleService.saveBatch(sysUserRoles);
         return true;
     }
 

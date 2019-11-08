@@ -23,7 +23,7 @@
 
     <select id="getByRoleId" resultType="xyz.iotcode.iadmin.demo.module.system.entity.SysPermission">
         SELECT
-            rp.*
+            p.*
         FROM
             sys_role_permission rp
             JOIN sys_permission p ON rp.permission_id = p.id

@@ -27,8 +27,6 @@ public interface SysUserService extends IService<SysUser> {
     })
     boolean isaveOrUpdate(SysUser param);
 
-    boolean iremove(List<Integer> list);
-
     @Cacheable(cacheNames = "cache-SysUser-byId", unless = "#result==null")
     SysUser igetById(Integer id);
 

@@ -83,6 +83,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             if (StringUtils.isBlank(iPermissions.value())){
                 return true;
             }
+            // 超级管理员直接返回
             if (CollectionUtil.isNotEmpty(permissionUser.getRoles())){
                 if (permissionUser.getRoles().contains(SUPER_ADMIN)){
                     return true;
@@ -91,8 +92,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
             if (CollectionUtil.isEmpty(permissionUser.getPermissions())){
                 throw new MyRuntimeException(NO_PERMISSION, 403);
             }
-            if (permissionUser.getPermissions().contains(iPermissions.value())){
-                return true;
+            if (!permissionUser.getPermissions().contains(iPermissions.value())){
+                throw new MyRuntimeException(NO_PERMISSION, 403);
             }
         }
         return true;
