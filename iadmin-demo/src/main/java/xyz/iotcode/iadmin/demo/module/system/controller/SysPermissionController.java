@@ -1,12 +1,15 @@
 package xyz.iotcode.iadmin.demo.module.system.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import xyz.iotcode.iadmin.common.tree.TreeFactory;
 import xyz.iotcode.iadmin.common.validated.Insert;
 import xyz.iotcode.iadmin.common.validated.Update;
 import xyz.iotcode.iadmin.common.vo.IResult;
@@ -14,12 +17,11 @@ import xyz.iotcode.iadmin.core.common.log.SaveLog;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysPermissionQuery;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 import xyz.iotcode.iadmin.demo.module.system.service.SysPermissionService;
+import xyz.iotcode.iadmin.demo.module.system.vo.PermissionTreeVO;
 import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -131,6 +133,31 @@ public class SysPermissionController {
     @PostMapping("/getByRoleId/{id}")
     public IResult<Set<SysPermission>> getByRoleId(@NotNull @PathVariable(value = "id") Integer id) {
         return IResult.ok(sysPermissionService.getByRoleId(id));
+    }
+
+    /**
+     * @description : 权限VO树接口
+     * ---------------------------------
+     * @author : 谢霜
+     * @since : Create in 2019-08-28
+     */
+    @ApiOperation(value="权限VO树接口", nickname="SysPermission:getTreeVO")
+    @GetMapping("/getTreeVO")
+    public IResult<Collection<PermissionTreeVO>> getPermissionTreeVO() {
+        SysPermissionQuery query = new SysPermissionQuery();
+        query.setPage(1);
+        query.setSize(10000);
+        IPage<SysPermission> ipage = sysPermissionService.ipage(query);
+        if (CollectionUtil.isEmpty(ipage.getRecords())){
+            return IResult.ok(Collections.emptySet());
+        }
+        Set<PermissionTreeVO> collect = ipage.getRecords().stream().map(sysPermission -> {
+            PermissionTreeVO vo = new PermissionTreeVO();
+            BeanUtils.copyProperties(sysPermission, vo);
+            vo.setName(sysPermission.getPermissionName());
+            return vo;
+        }).collect(Collectors.toSet());
+        return IResult.ok(new TreeFactory<PermissionTreeVO>().createTree(collect));
     }
 
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.iotcode.iadmin.common.validated.Insert;
@@ -103,9 +104,20 @@ public class SysRoleController {
     @IPermissions(value="SysRole:del")
     @ApiOperation(value="删除角色数据接口", nickname="SysRole:del")
     @PostMapping("/remove/{id}")
+    @Transactional(rollbackFor = Exception.class)
     public IResult deleteSysRoleById(@PathVariable(value = "id") String id) {
-        List<Integer> list = Arrays.asList(id.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
-        return IResult.auto(sysRoleService.iremove(list));
+        List<Integer> list = Arrays.stream(id.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        for (Integer integer : list) {
+            sysRoleService.iremove(integer);
+        }
+        return IResult.ok();
     }
 
+    @SaveLog(value="获取用户的角色列表接口")
+    @IPermissions(value="SysRole:getByUser")
+    @ApiOperation(value="获取用户的角色列表接口", nickname="SysRole:getByUser")
+    @GetMapping("/getByUser/{id}")
+    public IResult<List<SysRole>> getRoleByUser(@PathVariable Integer id){
+        return IResult.ok(sysRoleService.getByUserId(id));
+    }
 }

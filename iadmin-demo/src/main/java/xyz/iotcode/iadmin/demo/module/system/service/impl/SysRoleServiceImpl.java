@@ -1,6 +1,7 @@
 package xyz.iotcode.iadmin.demo.module.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             param.setLabel(null);
         }
         this.saveOrUpdate(param);
-        if (CollectionUtil.isNotEmpty(param.getPermissionIdList())){
+        if (ArrayUtil.isNotEmpty(param.getPermissionIdList())){
             sysRolePermissionService.removeByRoleId(param.getId());
             List<SysRolePermission> sysRolePermissionList = new ArrayList<>();
             for (Integer integer : param.getPermissionIdList()) {

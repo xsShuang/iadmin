@@ -64,7 +64,7 @@ public class SysRole extends Model<SysRole> {
 
     @ApiModelProperty(value = "权限id集合")
     @TableField(exist = false)
-    private List<Integer> permissionIdList;
+    private Integer[] permissionIdList;
 
     @Override
     protected Serializable pkVal() {

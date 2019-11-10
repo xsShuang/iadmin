@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +13,9 @@ import javax.validation.constraints.NotNull;
  * @author xieshuang
  * @date 2019-04-24 17:55
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 @ApiModel("分页DTO")
 public class PageDTO extends BaseDto {
 
