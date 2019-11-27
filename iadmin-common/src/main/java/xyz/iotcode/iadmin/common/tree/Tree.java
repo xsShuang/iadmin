@@ -11,5 +11,5 @@ import java.util.Collection;
 public class Tree{
     private Number id;
     private Number pid;
-    private Collection childs;
+    private Collection children;
 }

@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import xyz.iotcode.iadmin.common.util.HttpContextUtil;
 import xyz.iotcode.iadmin.common.util.IPUtil;
+import xyz.iotcode.iadmin.core.base.dto.TimeDTO;
 import xyz.iotcode.iadmin.demo.common.util.AddressUtil;
 import xyz.iotcode.iadmin.demo.module.log.controller.query.SysLoginLogQuery;
 import xyz.iotcode.iadmin.demo.module.log.entity.SysLoginLog;
@@ -30,6 +31,7 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
 
     @Override
     public IPage<SysLoginLog> ipage(SysLoginLogQuery query) {
+        TimeDTO.setBeginAndEndTime(query);
         return this.page(query.createPage(), new WrapperFactory<SysLoginLog>().create(query));
     }
 

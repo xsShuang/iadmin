@@ -46,7 +46,7 @@ public class TreeFactory<T extends Tree>{
             for (T t : list) {
                 treeNodeList.add(addChildNode(t, collect));
             }
-            treeNode.setChilds(treeNodeList);
+            treeNode.setChildren(treeNodeList);
         }
         return treeNode;
     }

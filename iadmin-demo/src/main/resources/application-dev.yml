@@ -16,7 +16,11 @@ spring:
     url: jdbc:mysql://47.107.79.3:3306/iadmin?characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: root
-
+  #这个是时区，一定要加，否则会默认为格林尼治时间，即少8小时
+  jackson:
+   time-zone: GMT+8
+   date-format: yyyy-MM-dd
+   joda-date-time-format: yyyy-MM-dd
   # redis 配置
   redis:
     database: 10              # Redis数据库索引（默认为0）

@@ -3,11 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>xyz.iotcode</groupId>
+		<groupId>xyz.iotcode.iadmin</groupId>
 		<artifactId>iadmin</artifactId>
 		<version>1.0.2</version>
 	</parent>
-	<groupId>xyz.iotcode</groupId>
 	<artifactId>iadmin-core</artifactId>
 	<version>${project.release.version}</version>
 	<name>iadmin-core</name>
@@ -21,7 +20,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>xyz.iotcode</groupId>
+			<groupId>xyz.iotcode.iadmin</groupId>
 			<artifactId>iadmin-common</artifactId>
 			<version>${project.release.version}</version>
 		</dependency>

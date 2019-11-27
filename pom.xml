@@ -8,7 +8,7 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>xyz.iotcode</groupId>
+    <groupId>xyz.iotcode.iadmin</groupId>
     <artifactId>iadmin</artifactId>
     <version>1.0.2</version>
     <name>iadmin</name>

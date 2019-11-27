@@ -53,4 +53,7 @@ public class SysLogQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Integer logLevel;
 
+    @ApiModelProperty(value = "时间排序")
+    @QueryCondition(condition = QueryCondition.Condition.DEFAULT, sort = QueryCondition.Sort.AUTO, field = "create_time")
+    private int timeSort = 1;
 }
