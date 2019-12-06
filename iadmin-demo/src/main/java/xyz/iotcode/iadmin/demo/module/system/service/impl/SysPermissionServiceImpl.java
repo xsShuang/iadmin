@@ -44,6 +44,9 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
     @Override
     public boolean isave(SysPermission param) {
+        if (param.getPid()==null){
+            param.setPid(0);
+        }
         SysPermission byCode = this.getByCode(param.getPermissionCode());
         if (byCode!=null){
             throw new MyRuntimeException("权限编码已存在");
