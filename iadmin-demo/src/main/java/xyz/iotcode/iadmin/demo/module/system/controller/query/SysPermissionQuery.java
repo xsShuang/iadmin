@@ -1,5 +1,6 @@
 package xyz.iotcode.iadmin.demo.module.system.controller.query;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import xyz.iotcode.iadmin.core.wrapper.QueryCondition;
 import xyz.iotcode.iadmin.core.base.dto.PageDTO;
 import java.util.Date;
@@ -9,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -34,16 +37,17 @@ public class SysPermissionQuery extends PageDTO implements Serializable {
     @QueryCondition
     private String permissionCode;
 
-
     @ApiModelProperty(value = "名称")
     @QueryCondition
     private String permissionName;
 
-
-    @ApiModelProperty(value = "模块")
+    @ApiModelProperty(value = "父级id")
     @QueryCondition
-    private Integer parentId;
+    private Integer pid;
 
+    @ApiModelProperty(value = "1路由，2操作")
+    @QueryCondition
+    private Integer type;
 
     @ApiModelProperty(value = "排序号")
     @QueryCondition

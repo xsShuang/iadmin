@@ -145,10 +145,13 @@ public class SysPermissionController {
      */
     @ApiOperation(value="权限VO树接口,用于权限列表", nickname="SysPermission:getListTreeVO")
     @GetMapping("/getListTreeVO")
-    public IResult<Page<PermissionListTreeVO>> getPermissionListTreeVO() {
+    public IResult<Page<PermissionListTreeVO>> getPermissionListTreeVO(Integer type) {
         SysPermissionQuery query = new SysPermissionQuery();
         query.setPage(1);
         query.setSize(10000);
+        if (type!=null){
+            query.setType(type);
+        }
         IPage<SysPermission> ipage = sysPermissionService.ipage(query);
         if (CollectionUtil.isEmpty(ipage.getRecords())){
             return IResult.ok(new Page<>());
