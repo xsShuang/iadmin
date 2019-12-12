@@ -5,7 +5,7 @@
     <parent>
         <groupId>xyz.iotcode.iadmin</groupId>
         <artifactId>iadmin</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <artifactId>iadmin-common</artifactId>
     <version>${project.release.version}</version>
@@ -13,7 +13,7 @@
     <description>iadmin 公共依赖</description>
 
     <properties>
-        <project.release.version>1.0.2</project.release.version>
+        <project.release.version>1.0.3</project.release.version>
         <skipTests>true</skipTests>
         <java.version>1.8</java.version>
     </properties>
