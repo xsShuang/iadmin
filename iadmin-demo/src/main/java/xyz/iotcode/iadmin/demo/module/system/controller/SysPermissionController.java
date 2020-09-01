@@ -1,16 +1,15 @@
 package xyz.iotcode.iadmin.demo.module.system.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import xyz.iotcode.iadmin.common.tree.TreeFactory;
+import xyz.iotcode.iadmin.common.util.TreeUtil;
 import xyz.iotcode.iadmin.common.validated.Insert;
 import xyz.iotcode.iadmin.common.validated.Update;
 import xyz.iotcode.iadmin.common.vo.IResult;
@@ -18,12 +17,13 @@ import xyz.iotcode.iadmin.core.common.log.SaveLog;
 import xyz.iotcode.iadmin.demo.module.system.controller.query.SysPermissionQuery;
 import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 import xyz.iotcode.iadmin.demo.module.system.service.SysPermissionService;
-import xyz.iotcode.iadmin.demo.module.system.vo.PermissionListTreeVO;
-import xyz.iotcode.iadmin.demo.module.system.vo.PermissionTreeVO;
 import xyz.iotcode.iadmin.permissions.annotation.IPermissions;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -145,7 +145,7 @@ public class SysPermissionController {
      */
     @ApiOperation(value="权限VO树接口,用于权限列表", nickname="SysPermission:getListTreeVO")
     @GetMapping("/getListTreeVO")
-    public IResult<Page<PermissionListTreeVO>> getPermissionListTreeVO(Integer type) {
+    public IResult<IPage<SysPermission>> getPermissionListTreeVO(Integer type) {
         SysPermissionQuery query = new SysPermissionQuery();
         query.setPage(1);
         query.setSize(10000);
@@ -153,17 +153,11 @@ public class SysPermissionController {
             query.setType(type);
         }
         IPage<SysPermission> ipage = sysPermissionService.ipage(query);
-        if (CollectionUtil.isEmpty(ipage.getRecords())){
+        if (CollUtil.isEmpty(ipage.getRecords())){
             return IResult.ok(new Page<>());
         }
-        Set<PermissionListTreeVO> collect = ipage.getRecords().stream().map(sysPermission -> {
-            PermissionListTreeVO vo = new PermissionListTreeVO();
-            BeanUtils.copyProperties(sysPermission, vo);
-            return vo;
-        }).collect(Collectors.toSet());
-        Page<PermissionListTreeVO> page = new Page<>();
-        page.setRecords((List<PermissionListTreeVO>) new TreeFactory<PermissionListTreeVO>().createTree(collect));
-        return IResult.ok(page);
+        ipage.setRecords(TreeUtil.intTree(ipage.getRecords()));
+        return IResult.ok(ipage);
     }
 
     /**
@@ -174,21 +168,15 @@ public class SysPermissionController {
      */
     @ApiOperation(value="权限VO树接口", nickname="SysPermission:getTreeVO")
     @GetMapping("/getTreeVO")
-    public IResult<Collection<PermissionTreeVO>> getPermissionTreeVO() {
+    public IResult<List<SysPermission>> getPermissionTreeVO() {
         SysPermissionQuery query = new SysPermissionQuery();
         query.setPage(1);
         query.setSize(10000);
         IPage<SysPermission> ipage = sysPermissionService.ipage(query);
-        if (CollectionUtil.isEmpty(ipage.getRecords())){
-            return IResult.ok(Collections.emptySet());
+        if (CollUtil.isEmpty(ipage.getRecords())){
+            return IResult.ok(Collections.emptyList());
         }
-        Set<PermissionTreeVO> collect = ipage.getRecords().stream().map(sysPermission -> {
-            PermissionTreeVO vo = new PermissionTreeVO();
-            BeanUtils.copyProperties(sysPermission, vo);
-            vo.setName(sysPermission.getPermissionName());
-            return vo;
-        }).collect(Collectors.toSet());
-        return IResult.ok(new TreeFactory<PermissionTreeVO>().createTree(collect));
+        return IResult.ok(TreeUtil.intTree(ipage.getRecords()));
     }
 
 }

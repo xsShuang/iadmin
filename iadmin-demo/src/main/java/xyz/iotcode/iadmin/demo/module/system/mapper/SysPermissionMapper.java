@@ -1,12 +1,7 @@
 package xyz.iotcode.iadmin.demo.module.system.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import xyz.iotcode.iadmin.demo.module.system.entity.SysRole;
-
-import java.util.List;
-import java.util.Set;
+import xyz.iotcode.iadmin.demo.module.system.entity.SysPermission;
 
 /**
  * <p>

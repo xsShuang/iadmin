@@ -7,6 +7,8 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -81,6 +83,9 @@ public class SysPermission extends Model<SysPermission> {
     @ApiModelProperty(value = "修改时间")
     @TableField("update_time")
     private Date updateTime;
+
+    @TableField(exist = false)
+    private List<SysPermission> child;
 
     @Override
     protected Serializable pkVal() {
